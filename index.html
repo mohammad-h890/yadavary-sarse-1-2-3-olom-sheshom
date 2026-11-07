@@ -1,0 +1,2747 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کاوشگران علوم ششم | بازی آموزشی و جعبه لایتنر هوشمند (درس ۱ تا ۳)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vazirmatn Persian Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif'],
+                    },
+                    colors: {
+                        science: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            font-family: 'Vazirmatn', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at top right, #1e1b4b, #0f172a 55%, #064e3b);
+            min-height: 100vh;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Styles */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.78);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .glass-panel-light {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom Animations */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 25px 6px rgba(16, 185, 129, 0.25); }
+        }
+
+        @keyframes popScore {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.28); color: #fde047; }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-float {
+            animation: floatSlow 3.5s ease-in-out infinite;
+        }
+
+        .animate-pulse-glow {
+            animation: pulseGlow 2.5s infinite;
+        }
+
+        .score-pop {
+            animation: popScore 0.6s ease-out;
+        }
+
+        .slide-in {
+            animation: slideInUp 0.35s ease-out forwards;
+        }
+
+        /* Option Button Hover & States */
+        .mcq-option {
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mcq-option:hover:not(:disabled) {
+            transform: translateX(-6px);
+            background: rgba(59, 130, 246, 0.22);
+            border-color: rgba(96, 165, 250, 0.65);
+        }
+        .mcq-option.correct {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.35), rgba(5, 150, 105, 0.25)) !important;
+            border-color: #10b981 !important;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+        .mcq-option.wrong {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.35), rgba(185, 28, 28, 0.25)) !important;
+            border-color: #ef4444 !important;
+        }
+
+        /* Leitner Box Visuals */
+        .leitner-slot {
+            transition: all 0.25s ease;
+        }
+        .leitner-slot:hover {
+            transform: translateY(-4px);
+        }
+        .leitner-slot.active-slot {
+            border-color: #38bdf8;
+            box-shadow: 0 0 18px rgba(56, 189, 248, 0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="selection:bg-emerald-500 selection:text-white">
+
+    <!-- Confetti Canvas Overlay -->
+    <canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-5 left-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+    <!-- ==========================================
+         1. LOGIN & STUDENT SELECTION MODAL/VIEW
+    =========================================== -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+        <!-- Decorative Background Elements -->
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="glass-card rounded-3xl p-6 sm:p-10 max-w-xl w-full shadow-2xl relative z-10 border border-emerald-500/30">
+            <!-- Header Badge -->
+            <div class="flex flex-col items-center text-center mb-6">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-500 flex items-center justify-center text-4xl shadow-lg shadow-emerald-500/30 mb-4 animate-float">
+                    🔬
+                </div>
+                <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 mb-2">
+                    ویژه پایه ششم ابتدایی • درس ۱، ۲ و ۳
+                </span>
+                <h1 class="text-2xl sm:text-3xl font-black bg-gradient-to-l from-white via-emerald-200 to-cyan-300 bg-clip-text text-transparent">
+                    آزمایشگاه هوشمند و لایتنر علوم ششم
+                </h1>
+                <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+                    یادگیری و مرور هوشمند <b>زنگ علوم</b>، <b>سرگذشت دفتر من</b> و <b>کارخانه کاغذسازی</b> همراه با جعبه لایتنر زمان‌بندی‌شده و جدول امتیازات
+                </p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-5">
+                <div>
+                    <label for="studentNameInput" class="block text-sm font-bold text-emerald-300 mb-2">
+                        <i class="fa-solid fa-user-astronaut ml-1"></i>
+                        نام و نام خانوادگی دانش‌آموز:
+                    </label>
+                    <input
+                        type="text"
+                        id="studentNameInput"
+                        required
+                        placeholder="مثلاً: امیرعلی محمدی یا سارا احمدی..."
+                        class="w-full px-4 py-3.5 rounded-2xl bg-slate-900/90 border border-slate-600 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30 text-white placeholder-slate-400 text-base outline-none transition"
+                    >
+                </div>
+
+                <!-- Avatar Picker -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-2">
+                        انتخاب نماد علمی شما:
+                    </label>
+                    <div id="avatarPicker" class="grid grid-cols-6 gap-2">
+                        <button type="button" data-avatar="🧑‍🔬" class="avatar-btn p-2.5 rounded-xl bg-emerald-500/30 border-2 border-emerald-400 text-2xl flex items-center justify-center transition hover:scale-105">🧑‍🔬</button>
+                        <button type="button" data-avatar="👩‍🔬" class="avatar-btn p-2.5 rounded-xl bg-slate-800/80 border-2 border-transparent text-2xl flex items-center justify-center transition hover:scale-105">👩‍🔬</button>
+                        <button type="button" data-avatar="🚀" class="avatar-btn p-2.5 rounded-xl bg-slate-800/80 border-2 border-transparent text-2xl flex items-center justify-center transition hover:scale-105">🚀</button>
+                        <button type="button" data-avatar="🧪" class="avatar-btn p-2.5 rounded-xl bg-slate-800/80 border-2 border-transparent text-2xl flex items-center justify-center transition hover:scale-105">🧪</button>
+                        <button type="button" data-avatar="🌲" class="avatar-btn p-2.5 rounded-xl bg-slate-800/80 border-2 border-transparent text-2xl flex items-center justify-center transition hover:scale-105">🌲</button>
+                        <button type="button" data-avatar="🦉" class="avatar-btn p-2.5 rounded-xl bg-slate-800/80 border-2 border-transparent text-2xl flex items-center justify-center transition hover:scale-105">🦉</button>
+                    </div>
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full py-4 rounded-2xl bg-gradient-to-l from-emerald-500 via-teal-500 to-cyan-600 hover:from-emerald-400 hover:to-cyan-500 text-slate-950 font-black text-lg shadow-lg shadow-emerald-500/25 transition transform active:scale-98 flex items-center justify-center gap-2"
+                >
+                    <span>ورود به بازی و ادامه یادگیری</span>
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+            </form>
+
+            <!-- Saved Students Quick Resume -->
+            <div id="savedProfilesSection" class="mt-7 pt-6 border-t border-slate-700/80 hidden">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-clock-rotate-left text-cyan-400"></i>
+                        ادامه بازی دانش‌آموزان قبلی (ذخیره شده در مرورگر):
+                    </span>
+                </div>
+                <div id="savedProfilesList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-48 overflow-y-auto pr-1">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <!-- Game Rules Mini Footer -->
+            <div class="mt-6 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-700/60 text-xs text-slate-300 space-y-1.5">
+                <div class="font-bold text-amber-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-star"></i>
+                    قوانین بازی و جعبه لایتنر:
+                </div>
+                <p>• به ازای هر پاسخ صحیح در <b>سوالات تستی</b>، <b>۱۰ امتیاز</b> می‌گیرید (سوالات تشریحی امتیازی ندارند و ویژه مرور لایتنر هستند).</p>
+                <p>• سوالات تستی غلط یا گزینه «یادم نیست» در سوالات تشریحی وارد <b>جعبه لایتنر</b> می‌شوند تا در روزهای آینده دوباره از شما پرسیده شوند.</p>
+                <p>• تمام پیشرفت‌ها، امتیازات و زمان‌بندی لایتنر شما به صورت خودکار ذخیره می‌شود.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         2. MAIN APPLICATION VIEW
+    =========================================== -->
+    <div id="appScreen" class="hidden min-h-screen flex flex-col">
+
+        <!-- TOP NAVIGATION BAR (نام دانش‌آموز و امتیاز کنار اسم او) -->
+        <header class="sticky top-0 z-40 glass-card border-b border-slate-700/80 px-3 sm:px-6 py-3 shadow-lg">
+            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+                
+                <!-- Right: Student Info + Score next to Name -->
+                <div class="flex items-center gap-3 bg-slate-900/90 border border-emerald-500/40 rounded-2xl px-3.5 py-2 shadow-inner">
+                    <div id="headerAvatar" class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500/30 to-cyan-500/30 border border-emerald-400/40 flex items-center justify-center text-2xl">
+                        🧑‍🔬
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span id="headerStudentName" class="font-black text-base sm:text-lg text-white tracking-tight">نام دانش‌آموز</span>
+                                <span id="headerRankBadge" class="text-[11px] px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 font-semibold">پژوهشگر جوان</span>
+                            </div>
+                        </div>
+                        <!-- Score Pill right beside student's name -->
+                        <div id="scoreBadgeContainer" class="flex items-center gap-1.5 bg-gradient-to-r from-amber-500/25 to-yellow-500/20 border border-amber-400/50 px-3 py-1 rounded-xl">
+                            <i class="fa-solid fa-coins text-amber-400 text-sm"></i>
+                            <span class="text-xs text-amber-200 font-semibold">امتیاز:</span>
+                            <span id="headerStudentScore" class="font-black text-base sm:text-lg text-amber-300">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center: Simulated Calendar & Due Today Status -->
+                <div class="flex items-center gap-2 bg-slate-900/75 border border-slate-700 rounded-2xl px-3 py-1.5 text-xs sm:text-sm">
+                    <div class="flex items-center gap-1.5 text-cyan-300 font-bold">
+                        <i class="fa-regular fa-calendar-check"></i>
+                        <span id="currentDayLabel">روز ۱ آموزش</span>
+                    </div>
+                    <span class="text-slate-600">|</span>
+                    <button
+                        id="advanceDayBtn"
+                        title="شبیه‌سازی گذر زمان برای آزمایش پرسش‌های برنامه‌ریزی‌شده در روزهای آینده لایتنر"
+                        class="px-2.5 py-1 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/35 text-cyan-200 border border-cyan-400/40 font-bold transition flex items-center gap-1 text-xs"
+                    >
+                        <i class="fa-solid fa-forward-fast"></i>
+                        <span>رفتن به فردا (+۱ روز)</span>
+                    </button>
+                </div>
+
+                <!-- Left: Controls (Sound, Leaderboard, Switch Student) -->
+                <div class="flex items-center gap-2">
+                    <button
+                        id="soundToggleBtn"
+                        class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 flex items-center justify-center text-emerald-400 transition"
+                        title="قطع / وصل صدای بازی"
+                    >
+                        <i id="soundIcon" class="fa-solid fa-volume-high"></i>
+                    </button>
+
+                    <button
+                        id="openAddQuestionModalBtn"
+                        class="px-3 py-2 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-400/40 text-indigo-200 text-xs font-bold transition flex items-center gap-1.5"
+                        title="افزودن سوال دلخواه جدید به بانک سوالات"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                        <span class="hidden md:inline">سوال جدید</span>
+                    </button>
+
+                    <button
+                        id="switchUserBtn"
+                        class="px-3 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/35 border border-rose-400/40 text-rose-200 text-xs font-bold transition flex items-center gap-1.5"
+                        title="تغییر دانش‌آموز (خروج به صفحه ورود)"
+                    >
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span class="hidden sm:inline">تغییر دانش‌آموز</span>
+                    </button>
+                </div>
+
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT CONTAINER -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-5 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- RIGHT / MAIN COLUMN (8 Cols on Desktop): Tabs, Filters, Active Game Card, Leitner Visual -->
+            <div class="lg:col-span-8 space-y-5">
+
+                <!-- Navigation Tabs -->
+                <div class="glass-card p-1.5 rounded-2xl flex flex-wrap gap-1.5 border border-slate-700/80">
+                    <button data-tab="play" class="main-tab-btn flex-1 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 bg-emerald-500 text-slate-950 shadow">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span>میز پرسش و بازی</span>
+                    </button>
+                    <button data-tab="leitner" class="main-tab-btn flex-1 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 text-slate-300 hover:bg-slate-800/70">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                        <span>جعبه لایتنر من</span>
+                        <span id="tabLeitnerDueBadge" class="px-2 py-0.5 text-[11px] rounded-full bg-rose-500 text-white font-black hidden">0</span>
+                    </button>
+                    <button data-tab="lessons" class="main-tab-btn flex-1 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 text-slate-300 hover:bg-slate-800/70">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                        <span>درس‌نامه مرور سریع</span>
+                    </button>
+                    <button data-tab="leaderboard" class="main-tab-btn flex-1 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 text-slate-300 hover:bg-slate-800/70 lg:hidden">
+                        <i class="fa-solid fa-trophy"></i>
+                        <span>جدول امتیازات</span>
+                    </button>
+                </div>
+
+                <!-- ==========================================
+                     TAB 1: PLAY & QUESTION ARENA
+                =========================================== -->
+                <section id="tabContent-play" class="space-y-5">
+
+                    <!-- Filter Bar: Study Mode, Lesson Filter, Question Type Filter -->
+                    <div class="glass-card rounded-2xl p-4 border border-slate-700/80 space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <!-- Mode Selector -->
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-400 mb-1">حالت پرسش:</label>
+                                <select id="modeFilterSelect" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-white font-bold outline-none focus:border-emerald-400">
+                                    <option value="smart">🎯 هوشمند (اولویت مرور لایتنر + سوالات جدید)</option>
+                                    <option value="leitner_due">⏰ فقط سوالات موعد رسیده امروز لایتنر</option>
+                                    <option value="new_only">✨ فقط سوالات جدید بررسی‌نشده</option>
+                                    <option value="leitner_all">📦 تمام سوالات موجود در لایتنر (حتی روزهای آینده)</option>
+                                    <option value="all_practice">🔄 مرور آزاد همه سوالات (تمرینی)</option>
+                                </select>
+                            </div>
+
+                            <!-- Lesson Selector -->
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-400 mb-1">انتخاب درس:</label>
+                                <select id="lessonFilterSelect" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-white font-bold outline-none focus:border-emerald-400">
+                                    <option value="all">📚 همه دروس (درس ۱، ۲ و ۳)</option>
+                                    <option value="1">🔬 درس ۱: زنگ علوم</option>
+                                    <option value="2">🌲 درس ۲: سرگذشت دفتر من</option>
+                                    <option value="3">🧪 درس ۳: کارخانه کاغذسازی</option>
+                                </select>
+                            </div>
+
+                            <!-- Question Type Selector -->
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-400 mb-1">نوع سوالات:</label>
+                                <select id="typeFilterSelect" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-white font-bold outline-none focus:border-emerald-400">
+                                    <option value="all">⚡ ترکیبی (تستی ۴ گزینه‌ای + تشریحی)</option>
+                                    <option value="mcq">📝 فقط سوالات تستی (۴ گزینه‌ای)</option>
+                                    <option value="descriptive">💡 فقط سوالات تشریحی (یادم هست / یادم نیست)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Progress Strip -->
+                        <div class="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <span class="text-slate-300">
+                                    <i class="fa-solid fa-circle-check text-emerald-400 ml-1"></i>
+                                    تثبیت‌شده: <b id="statMasteredCount" class="text-emerald-300">0</b>
+                                </span>
+                                <span class="text-slate-300">
+                                    <i class="fa-solid fa-box-archive text-amber-400 ml-1"></i>
+                                    در جعبه لایتنر: <b id="statInLeitnerCount" class="text-amber-300">0</b>
+                                </span>
+                                <span class="text-slate-300">
+                                    <i class="fa-solid fa-bell text-rose-400 ml-1"></i>
+                                    موعد پرسش امروز: <b id="statDueTodayCount" class="text-rose-300">0</b>
+                                </span>
+                                <span class="text-slate-300">
+                                    <i class="fa-solid fa-sparkles text-cyan-400 ml-1"></i>
+                                    سوالات جدید باقی‌مانده: <b id="statNewRemainingCount" class="text-cyan-300">0</b>
+                                </span>
+                            </div>
+                            <span id="queueCounterBadge" class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 font-semibold">
+                                سوال 1 از 48
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- ACTIVE QUESTION CARD -->
+                    <div id="questionCardContainer" class="glass-card rounded-3xl p-5 sm:p-7 border border-slate-700 shadow-2xl relative overflow-hidden min-h-[380px] flex flex-col justify-between">
+                        
+                        <!-- Card Header Metadata -->
+                        <div>
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-5 pb-3 border-b border-slate-700/70">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span id="qLessonBadge" class="px-3 py-1 rounded-xl text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                        درس ۱: زنگ علوم
+                                    </span>
+                                    <span id="qTypeBadge" class="px-3 py-1 rounded-xl text-xs font-extrabold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                                        سوال تستی
+                                    </span>
+                                    <span id="qLeitnerStatusBadge" class="px-3 py-1 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                                        سوال جدید ✨
+                                    </span>
+                                </div>
+                                <div id="qPointsBadge" class="flex items-center gap-1.5 text-amber-300 text-xs font-bold bg-amber-500/10 border border-amber-400/30 px-2.5 py-1 rounded-lg">
+                                    <i class="fa-solid fa-bolt"></i>
+                                    <span>پاسخ درست تستی: +۱۰ امتیاز</span>
+                                </div>
+                            </div>
+
+                            <!-- Question Prompt Text -->
+                            <div class="mb-6">
+                                <h2 id="questionText" class="text-lg sm:text-xl font-extrabold text-white leading-relaxed">
+                                    در حال بارگذاری سوال...
+                                </h2>
+                            </div>
+
+                            <!-- A) MULTIPLE CHOICE OPTIONS AREA -->
+                            <div id="mcqArea" class="space-y-3 hidden">
+                                <div id="mcqOptionsList" class="grid grid-cols-1 gap-3">
+                                    <!-- Dynamically populated 4 options -->
+                                </div>
+                            </div>
+
+                            <!-- B) DESCRIPTIVE QUESTION AREA -->
+                            <div id="descriptiveArea" class="space-y-4 hidden">
+                                <!-- Optional Self-Note Input before revealing -->
+                                <div id="descriptiveThinkBox" class="space-y-3">
+                                    <textarea
+                                        id="descriptiveStudentDraft"
+                                        rows="2"
+                                        placeholder="(اختیاری) پاسخ خود را اینجا بنویسید یا در ذهن مرور کنید، سپس دکمه مشاهده پاسخ صحیح را بزنید..."
+                                        class="w-full p-3.5 rounded-2xl bg-slate-900/80 border border-slate-700 focus:border-cyan-400 text-sm text-white placeholder-slate-400 outline-none resize-none"
+                                    ></textarea>
+                                    <button
+                                        id="revealDescriptiveAnswerBtn"
+                                        class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-l from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-black text-sm sm:text-base shadow-lg transition flex items-center justify-center gap-2"
+                                    >
+                                        <i class="fa-solid fa-eye"></i>
+                                        <span>بررسی و مشاهده پاسخ تشریحی</span>
+                                    </button>
+                                </div>
+
+                                <!-- Revealed Descriptive Answer & "یادم هست / یادم نیست" Buttons -->
+                                <div id="descriptiveAnswerBox" class="hidden space-y-4 slide-in">
+                                    <div class="p-4 sm:p-5 rounded-2xl bg-emerald-950/60 border-2 border-emerald-500/40">
+                                        <div class="text-xs font-bold text-emerald-300 mb-1.5 flex items-center gap-1.5">
+                                            <i class="fa-solid fa-check-double"></i>
+                                            <span>پاسخ صحیح کتاب درسی:</span>
+                                        </div>
+                                        <p id="descriptiveAnswerText" class="text-sm sm:text-base text-emerald-50 font-semibold leading-relaxed"></p>
+                                    </div>
+
+                                    <!-- Self-Evaluation Prompt -->
+                                    <div id="descriptiveActionButtons" class="p-4 rounded-2xl bg-slate-900/90 border border-slate-700 text-center space-y-3">
+                                        <p class="text-xs sm:text-sm font-bold text-slate-200">
+                                            آیا پاسخ این سوال تشریحی را به درستی به خاطر داشتید؟ (تعیین وضعیت در جعبه لایتنر - بدون امتیاز)
+                                        </p>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <button
+                                                id="btnRememberedYes"
+                                                class="py-3.5 px-4 rounded-2xl bg-gradient-to-l from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-sm sm:text-base shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2"
+                                            >
+                                                <i class="fa-solid fa-circle-check text-lg"></i>
+                                                <span>✅ یادم هست (پیشرفت در لایتنر)</span>
+                                            </button>
+                                            <button
+                                                id="btnRememberedNo"
+                                                class="py-3.5 px-4 rounded-2xl bg-gradient-to-l from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-black text-sm sm:text-base shadow-lg shadow-rose-600/20 transition flex items-center justify-center gap-2"
+                                            >
+                                                <i class="fa-solid fa-circle-xmark text-lg"></i>
+                                                <span>❌ یادم نیست (ورود/بازگشت به خانه ۱ لایتنر)</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FEEDBACK & LEITNER SCHEDULING RESULT BOX (Shown after answering either MCQ or Descriptive) -->
+                            <div id="feedbackResultBox" class="hidden mt-5 p-4 rounded-2xl border slide-in">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                                    <div id="feedbackTitle" class="font-black text-base flex items-center gap-2"></div>
+                                    <span id="feedbackScheduleBadge" class="text-xs px-3 py-1 rounded-full font-bold"></span>
+                                </div>
+                                <p id="feedbackExplanationText" class="text-xs sm:text-sm text-slate-200 leading-relaxed"></p>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer Navigation -->
+                        <div class="mt-6 pt-4 border-t border-slate-800/90 flex items-center justify-between gap-3">
+                            <button
+                                id="prevQuestionBtn"
+                                class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold transition flex items-center gap-1.5"
+                            >
+                                <i class="fa-solid fa-chevron-right"></i>
+                                <span>سوال قبلی</span>
+                            </button>
+
+                            <button
+                                id="nextQuestionBtn"
+                                class="px-6 py-2.5 rounded-xl bg-gradient-to-l from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs sm:text-sm font-black shadow-md transition flex items-center gap-2"
+                            >
+                                <span>سوال بعدی</span>
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- EMPTY QUEUE STATE (When all questions in current filter are done/scheduled for future days) -->
+                    <div id="emptyQueueContainer" class="hidden glass-card rounded-3xl p-8 text-center border border-emerald-500/30 space-y-4">
+                        <div class="w-20 h-20 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-4xl mx-auto">
+                            🎉
+                        </div>
+                        <h3 id="emptyQueueTitle" class="text-xl font-black text-white">
+                            فوق‌العاده! تمام سوالات این بخش را بررسی کردید!
+                        </h3>
+                        <p id="emptyQueueSubtitle" class="text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
+                            سوالاتی که در جعبه لایتنر قرار دارند برای روزهای آینده برنامه‌ریزی شده‌اند. می‌توانید با دکمه «رفتن به فردا (+۱ روز)» زمان را جلو ببرید یا سوالات در انتظار لایتنر را همین الان تمرین کنید.
+                        </p>
+                        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+                            <button
+                                id="emptyAdvanceDayBtn"
+                                class="px-5 py-3 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm transition flex items-center gap-2 shadow-lg"
+                            >
+                                <i class="fa-solid fa-forward-fast"></i>
+                                <span>شبیه‌سازی فردا (+۱ روز جلو رفتن برای مرور لایتنر)</span>
+                            </button>
+                            <button
+                                id="emptySwitchToPracticeAllBtn"
+                                class="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 font-bold text-sm transition flex items-center gap-2"
+                            >
+                                <i class="fa-solid fa-rotate"></i>
+                                <span>مرور آزاد همه سوالات</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- MINI VISUAL LEITNER BOX STRIP (Always visible under the question card) -->
+                    <div class="glass-card rounded-2xl p-4 border border-slate-700/80">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xs sm:text-sm font-black text-white flex items-center gap-2">
+                                <i class="fa-solid fa-layer-group text-amber-400"></i>
+                                <span>وضعیت زنده جعبه لایتنر ۵ خانه‌ای شما (کلیک روی هر خانه برای مشاهده):</span>
+                            </h3>
+                            <span class="text-[11px] text-slate-400">فاصله زمانی مرور: ۱، ۲، ۴، ۸ و ۱۵ روز</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-6 gap-2.5" id="miniLeitnerBoxesGrid">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- ==========================================
+                     TAB 2: DETAILED LEITNER BOX MANAGER
+                =========================================== -->
+                <section id="tabContent-leitner" class="hidden space-y-5">
+                    <div class="glass-card rounded-3xl p-5 sm:p-6 border border-slate-700">
+                        <div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-4 border-b border-slate-700/80">
+                            <div>
+                                <h2 class="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-boxes-stacked text-amber-400"></i>
+                                    <span>جعبه لایتنر هوشمند و برنامه مرور روزهای آینده</span>
+                                </h2>
+                                <p class="text-xs text-slate-300 mt-1">
+                                    هر سوال تستی که غلط جواب دهید یا سوال تشریحی که «یادم نیست» بزنید، وارد خانه ۱ لایتنر می‌شود و طبق برنامه زمان‌بندی از شما پرسیده خواهد شد.
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button
+                                    id="leitnerTabReviewDueBtn"
+                                    class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition flex items-center gap-1.5 shadow"
+                                >
+                                    <i class="fa-solid fa-play"></i>
+                                    <span>شروع پرسش سوالات موعد امروز</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 5 Boxes + Mastered Detailed Cards -->
+                        <div id="detailedLeitnerBoxesGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+                            <!-- Populated via JS -->
+                        </div>
+
+                        <!-- List of Questions Inside Leitner with Scheduled Review Days -->
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h3 id="selectedLeitnerBoxListTitle" class="text-sm font-extrabold text-cyan-300">
+                                    لیست سوالات زمان‌بندی‌شده در جعبه لایتنر:
+                                </h3>
+                                <div class="flex gap-1.5">
+                                    <button data-boxfilter="all" class="leitner-list-filter-btn px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-bold">همه خانه‌ها</button>
+                                    <button data-boxfilter="due" class="leitner-list-filter-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold">موعد امروز</button>
+                                    <button data-boxfilter="mastered" class="leitner-list-filter-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold">تثبیت‌شده‌ها</button>
+                                </div>
+                            </div>
+
+                            <div id="leitnerScheduledItemsList" class="space-y-2.5 max-h-[420px] overflow-y-auto pr-1">
+                                <!-- Populated via JS -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==========================================
+                     TAB 3: QUICK TEXTBOOK STUDY GUIDE (درس‌نامه)
+                =========================================== -->
+                <section id="tabContent-lessons" class="hidden space-y-4">
+                    <!-- Lesson 1 Summary -->
+                    <div class="glass-card rounded-3xl p-5 sm:p-6 border border-emerald-500/30 space-y-3">
+                        <div class="flex items-center gap-2.5 text-emerald-300 font-black text-base sm:text-lg">
+                            <span class="w-9 h-9 rounded-xl bg-emerald-500/20 flex items-center justify-center">🔬</span>
+                            <span>درس اول: زنگ علوم (روش علمی و کاوشگری)</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-200 leading-relaxed">
+                            <div class="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-700/70">
+                                <b class="text-amber-300 block mb-1">۱. ترتیب ۶ مرحله روش علمی:</b>
+                                ۱) مشاهده (با حواس پنج‌گانه یا ابزار) ← ۲) طرح مسئله (سوال علمی) ← ۳) فرضیه‌سازی (حدس و گمان علمی بر پایه اطلاعات قبلی) ← ۴) آزمایش ← ۵) جمع‌آوری اطلاعات و ثبت مشاهدات ← ۶) نتیجه‌گیری (رد یا تایید فرضیه).
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-700/70">
+                                <b class="text-cyan-300 block mb-1">۲. متغیرها و تکرار آزمایش:</b>
+                                در یک آزمایش علمی فقط <b>یک عامل (متغیر مستقل)</b> مثل جنس کاغذ موشک را تغییر می‌دهیم و بقیه عوامل (اندازه، مدل ساخت، شدت پرتاب) را <b>ثابت</b> نگه می‌داریم. برای اطمینان از درستی نتیجه، آزمایش را <b>چندین بار تکرار</b> می‌کنیم.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lesson 2 Summary -->
+                    <div class="glass-card rounded-3xl p-5 sm:p-6 border border-cyan-500/30 space-y-3">
+                        <div class="flex items-center gap-2.5 text-cyan-300 font-black text-base sm:text-lg">
+                            <span class="w-9 h-9 rounded-xl bg-cyan-500/20 flex items-center justify-center">🌲</span>
+                            <span>درس دوم: سرگذشت دفتر من (تولید کاغذ، منابع طبیعی و بازیافت)</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-200 leading-relaxed">
+                            <div class="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-700/70">
+                                <b class="text-amber-300 block mb-1">۱. مراحل تولید کاغذ از چوب:</b>
+                                قطع درخت و انتقال به کارخانه ← کندن پوست تنه ← تبدیل به <b>تراشه‌های ریز (چیپس چوب)</b> ← ترکیب با آب و مواد شیمیایی برای تهیه <b>خمیر کاغذ</b> ← <b>رنگ‌بری (سفید کردن)</b> با آب‌اکسیژنه یا کلر ← عبور از <b>غلتک‌های آب‌گیری و خشک‌کن</b> ← برش و بسته‌بندی.
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-700/70">
+                                <b class="text-emerald-300 block mb-1">۲. منابع طبیعی و فواید بازیافت کاغذ:</b>
+                                درختان <b>منبع طبیعی تجدیدپذیر</b> و نفت، زغال‌سنگ و فلزات <b>منابع تجدیدناپذیر</b> هستند. بازیافت کاغذ باعث کاهش قطع درختان، صرفه‌جویی در مصرف آب و انرژی الکتریکی و کاهش حجم زباله‌ها می‌شود.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lesson 3 Summary -->
+                    <div class="glass-card rounded-3xl p-5 sm:p-6 border border-indigo-500/30 space-y-3">
+                        <div class="flex items-center gap-2.5 text-indigo-300 font-black text-base sm:text-lg">
+                            <span class="w-9 h-9 rounded-xl bg-indigo-500/20 flex items-center justify-center">🧪</span>
+                            <span>درس سوم: کارخانه کاغذسازی (تغییر فیزیکی و شیمیایی، اسیدها و بازها)</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-200 leading-relaxed">
+                            <div class="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-700/70">
+                                <b class="text-amber-300 block mb-1">۱. تغییر فیزیکی در برابر تغییر شیمیایی:</b>
+                                • <b>تغییر فیزیکی:</b> جنس ماده عوض نمی‌شود (مثل خرد کردن چوب، خشک شدن خمیر کاغذ، ذوب یخ).<br>
+                                • <b>تغییر شیمیایی:</b> ماده جدیدی با خواص متفاوت تولید می‌شود (مثل سفید کردن خمیر کاغذ با آب‌اکسیژنه، سوختن چوب، زنگ زدن آهن، ترکیب سرکه و جوش‌شیرین).
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-700/70">
+                                <b class="text-rose-300 block mb-1">۲. اسیدها، بازها و نشاسته در کاغذ:</b>
+                                • <b>اسیدها:</b> ترش‌مزه، تغییر کاغذ پی‌اچ به <b>قرمز/نارنجی</b> (مثل آب‌لیمو، سرکه، جوهر نمک).<br>
+                                • <b>بازها:</b> تلخ‌مزه و لیز، تغییر کاغذ پی‌اچ به <b>آبی/بنفش</b> (مثل مایع ظرف‌شویی، صابون، جوش‌شیرین).<br>
+                                • <b>نشاسته:</b> به خمیر کاغذ اضافه می‌شود تا کاغذ در برابر نفوذ آب و پخش شدن جوهر مقاوم شود.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==========================================
+                     TAB 4: MOBILE LEADERBOARD VIEW
+                =========================================== -->
+                <section id="tabContent-leaderboard" class="hidden lg:hidden">
+                    <div class="glass-card rounded-3xl p-5 border border-slate-700">
+                        <h3 class="text-base font-black text-amber-300 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-trophy"></i>
+                            <span>جدول امتیازات دانش‌آموزان</span>
+                        </h3>
+                        <div id="mobileLeaderboardList" class="space-y-2.5"></div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- LEFT SIDEBAR (4 Cols on Desktop): Leaderboard + Student Stats & Data Controls -->
+            <aside class="lg:col-span-4 space-y-5">
+
+                <!-- LEADERBOARD CARD (جدول امتیازات) -->
+                <div class="glass-card rounded-3xl p-5 border border-amber-500/30 shadow-xl">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-700/80">
+                        <div class="flex items-center gap-2">
+                            <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300">
+                                <i class="fa-solid fa-ranking-star text-lg"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-base font-black text-white">جدول امتیازات کلاسی</h2>
+                                <span class="text-[11px] text-slate-400">هر پاسخ صحیح تستی = ۱۰ امتیاز</span>
+                            </div>
+                        </div>
+                        <button
+                            id="addStudentQuickBtn"
+                            class="px-2.5 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/35 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition"
+                            title="ورود دانش‌آموز جدید برای رقابت در جدول امتیازات"
+                        >
+                            + دانش‌آموز جدید
+                        </button>
+                    </div>
+
+                    <div id="desktopLeaderboardList" class="space-y-2.5 max-h-[340px] overflow-y-auto pr-1">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+
+                <!-- LESSON MASTERY BREAKDOWN CARD -->
+                <div class="glass-card rounded-3xl p-5 border border-slate-700/80 space-y-4">
+                    <h3 class="text-sm font-black text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-emerald-400"></i>
+                        <span>درصد پیشرفت به تفکیک هر درس:</span>
+                    </h3>
+
+                    <!-- Lesson 1 Progress -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs">
+                            <span class="font-bold text-emerald-300">🔬 درس ۱: زنگ علوم</span>
+                            <span id="progTextLesson1" class="text-slate-300 font-bold">0 از 16</span>
+                        </div>
+                        <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                            <div id="progBarLesson1" class="h-full bg-gradient-to-l from-emerald-400 to-teal-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Lesson 2 Progress -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs">
+                            <span class="font-bold text-cyan-300">🌲 درس ۲: سرگذشت دفتر من</span>
+                            <span id="progTextLesson2" class="text-slate-300 font-bold">0 از 16</span>
+                        </div>
+                        <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                            <div id="progBarLesson2" class="h-full bg-gradient-to-l from-cyan-400 to-blue-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Lesson 3 Progress -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs">
+                            <span class="font-bold text-indigo-300">🧪 درس ۳: کارخانه کاغذسازی</span>
+                            <span id="progTextLesson3" class="text-slate-300 font-bold">0 از 16</span>
+                        </div>
+                        <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                            <div id="progBarLesson3" class="h-full bg-gradient-to-l from-indigo-400 to-purple-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Backup & Reset Controls -->
+                    <div class="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                        <button
+                            id="exportDataBtn"
+                            class="flex-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center justify-center gap-1.5"
+                        >
+                            <i class="fa-solid fa-download text-cyan-400"></i>
+                            <span>پشتیبان‌گیری</span>
+                        </button>
+                        <button
+                            id="resetCurrentStudentBtn"
+                            class="py-2 px-3 rounded-xl bg-rose-950/60 hover:bg-rose-900/70 text-rose-300 border border-rose-800/50 text-xs font-bold transition flex items-center justify-center gap-1.5"
+                            title="پاک کردن پیشرفت دانش‌آموز فعلی و شروع از صفر"
+                        >
+                            <i class="fa-solid fa-trash-can"></i>
+                            <span>شروع مجدد من</span>
+                        </button>
+                    </div>
+                </div>
+
+            </aside>
+
+        </main>
+    </div>
+
+    <!-- ==========================================
+         3. MODAL: ADD CUSTOM QUESTION (افزودن سوال جدید)
+    =========================================== -->
+    <div id="addQuestionModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="glass-card rounded-3xl p-6 max-w-lg w-full border border-indigo-500/40 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-black text-white flex items-center gap-2">
+                    <i class="fa-solid fa-circle-plus text-indigo-400"></i>
+                    <span>افزودن سوال جدید به بازی</span>
+                </h3>
+                <button id="closeAddQuestionModalBtn" class="text-slate-400 hover:text-white text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="addQuestionForm" class="space-y-3.5 text-xs sm:text-sm">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">مربوط به کدام درس؟</label>
+                        <select id="newQLesson" class="w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none">
+                            <option value="1">درس ۱: زنگ علوم</option>
+                            <option value="2">درس ۲: سرگذشت دفتر من</option>
+                            <option value="3">درس ۳: کارخانه کاغذسازی</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">نوع سوال:</label>
+                        <select id="newQType" class="w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none">
+                            <option value="mcq">تستی (۴ گزینه‌ای)</option>
+                            <option value="descriptive">تشریحی (یادم هست / نیست)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">متن صورت سوال:</label>
+                    <textarea id="newQText" required rows="2" placeholder="صورت سوال را بنویسید..." class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none"></textarea>
+                </div>
+
+                <!-- MCQ Options Input -->
+                <div id="newQMcqFields" class="space-y-2">
+                    <label class="block font-bold text-emerald-300">گزینه‌ها (گزینه صحیح را انتخاب کنید):</label>
+                    <div class="flex items-center gap-2">
+                        <input type="radio" name="newQCorrectIdx" value="0" checked class="accent-emerald-500">
+                        <input type="text" id="newQOpt0" placeholder="گزینه ۱" class="flex-1 p-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="radio" name="newQCorrectIdx" value="1" class="accent-emerald-500">
+                        <input type="text" id="newQOpt1" placeholder="گزینه ۲" class="flex-1 p-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="radio" name="newQCorrectIdx" value="2" class="accent-emerald-500">
+                        <input type="text" id="newQOpt2" placeholder="گزینه ۳" class="flex-1 p-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="radio" name="newQCorrectIdx" value="3" class="accent-emerald-500">
+                        <input type="text" id="newQOpt3" placeholder="گزینه ۴" class="flex-1 p-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none">
+                    </div>
+                </div>
+
+                <!-- Descriptive Answer / Explanation -->
+                <div>
+                    <label id="newQExpLabel" class="block font-bold text-slate-300 mb-1">پاسخ تشریحی / توضیح آموزشی سوال:</label>
+                    <textarea id="newQExplanation" required rows="2" placeholder="پاسخ کامل یا توضیح علمی را وارد کنید..." class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black transition">
+                    ذخیره سوال در بانک سوالات
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         4. CUSTOM CONFIRMATION MODAL (No window.confirm!)
+    =========================================== -->
+    <div id="customConfirmModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="glass-card rounded-3xl p-6 max-w-sm w-full border border-rose-500/40 text-center space-y-4 shadow-2xl">
+            <div class="w-14 h-14 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-2xl mx-auto">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h4 id="confirmModalTitle" class="text-base font-black text-white">آیا مطمئن هستید؟</h4>
+            <p id="confirmModalMessage" class="text-xs text-slate-300 leading-relaxed"></p>
+            <div class="flex items-center gap-2.5 pt-2">
+                <button id="confirmModalYesBtn" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition">بله، انجام شود</button>
+                <button id="confirmModalNoBtn" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">انصراف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         JAVASCRIPT ENGINE
+    =========================================== -->
+    <script>
+        /**************************************************************
+         * 1. AUTHENTIC QUESTION BANK (48 QUESTIONS: LESSONS 1, 2, 3)
+         * Balanced between Multiple-Choice (mcq) and Descriptive (descriptive)
+         **************************************************************/
+        const DEFAULT_QUESTIONS = [
+            // ================= درس ۱: زنگ علوم (۱۶ سوال) =================
+            {
+                id: "q1",
+                lesson: 1,
+                type: "mcq",
+                question: "اولین مرحله از مراحل «روش علمی» در بررسی پدیده‌های علمی کدام است؟",
+                options: [
+                    "فرضیه‌سازی",
+                    "مشاهده دقیق با حواس یا ابزار",
+                    "طراحی و انجام آزمایش",
+                    "نتیجه‌گیری نهایی"
+                ],
+                correctIndex: 1,
+                explanation: "هر کاوش علمی ابتدا با «مشاهده» دقیق پدیده‌ها با استفاده از حواس پنج‌گانه (بینایی، شنوایی، لامسه و...) یا ابزارهای علمی آغاز می‌شود و سپس به طرح مسئله می‌رسد."
+            },
+            {
+                id: "q2",
+                lesson: 1,
+                type: "mcq",
+                question: "پیشنهاد، حدس یا گمان علمی که بر پایه اطلاعات و تجربه‌های قبلی برای پاسخ احتمالی به یک مسئله بیان می‌شود، چه نام دارد؟",
+                options: [
+                    "مشاهده",
+                    "نتیجه‌گیری",
+                    "فرضیه",
+                    "متغیر کنترل‌شده"
+                ],
+                correctIndex: 2,
+                explanation: "«فرضیه» یک حدس یا پیش‌بینی علمی است که هنوز درستی یا نادرستی آن ثابت نشده است و باید با انجام «آزمایش» بررسی شود."
+            },
+            {
+                id: "q3",
+                lesson: 1,
+                type: "mcq",
+                question: "برای اینکه بدانیم یک «فرضیه علمی» درست است یا نادرست، بهترین کار چیست؟",
+                options: [
+                    "فرضیه را بدون بررسی بپذیریم",
+                    "طراحی و انجام آزمایش علمی و جمع‌آوری اطلاعات",
+                    "سوال را تغییر دهیم",
+                    "فقط به نظر یک نفر اکتفا کنیم"
+                ],
+                correctIndex: 1,
+                explanation: "در روش علمی، برای بررسی درستی یا نادرستی هر فرضیه باید «آزمایش» طراحی و اجرا کنیم و اطلاعات به دست آمده را ثبت و تحلیل نماییم."
+            },
+            {
+                id: "q4",
+                lesson: 1,
+                type: "mcq",
+                question: "اگر بخواهیم تاثیر «جنس کاغذ» را بر مدت زمان پرواز موشک کاغذی آزمایش کنیم، کدام عامل را باید تغییر دهیم؟",
+                options: [
+                    "همه عوامل مثل اندازه، مدل و جنس کاغذ را با هم تغییر دهیم",
+                    "فقط جنس کاغذ را تغییر دهیم و اندازه، مدل ساخت و شدت پرتاب را ثابت نگه داریم",
+                    "فقط اندازه بال‌های موشک را تغییر دهیم",
+                    "نیازی به پرتاب موشک نیست"
+                ],
+                correctIndex: 1,
+                explanation: "در یک آزمایش علمی معتبر، فقط عاملی را که می‌خواهیم اثرش را بسنجیم (در اینجا جنس کاغذ) تغییر می‌دهیم و تمام عوامل دیگر (اندازه برگه، مدل موشک، نیروی پرتاب) را یکسان و ثابت نگه می‌داریم."
+            },
+            {
+                id: "q5",
+                lesson: 1,
+                type: "mcq",
+                question: "چرا دانشمندان یک آزمایش علمی را چندین بار تکرار می‌کنند؟",
+                options: [
+                    "چون آزمایش اول همیشه اشتباه است",
+                    "برای سرگرمی و پر کردن وقت آزمایشگاه",
+                    "برای کاهش خطا و اطمینان از درستی و دقت نتایج آزمایش",
+                    "برای اینکه فرضیه خود را تغییر دهند"
+                ],
+                correctIndex: 2,
+                explanation: "تکرار آزمایش (معمولاً حداقل ۳ بار) باعث می‌شود خطاهای احتمالی کاهش یابد و از درستی و قابل اعتماد بودن نتیجه آزمایش مطمئن شویم."
+            },
+            {
+                id: "q6",
+                lesson: 1,
+                type: "mcq",
+                question: "ترتیب درست مراحل روش علمی در کدام گزینه به درستی بیان شده است؟",
+                options: [
+                    "مشاهده ← طرح مسئله ← فرضیه‌سازی ← آزمایش ← نتیجه‌گیری",
+                    "فرضیه‌سازی ← مشاهده ← آزمایش ← طرح مسئله ← نتیجه‌گیری",
+                    "طرح مسئله ← نتیجه‌گیری ← مشاهده ← فرضیه‌سازی ← آزمایش",
+                    "آزمایش ← مشاهده ← فرضیه‌سازی ← نتیجه‌گیری ← طرح مسئله"
+                ],
+                correctIndex: 0,
+                explanation: "ترتیب صحیح مراحل روش علمی عبارت است از: ۱- مشاهده ۲- طرح مسئله (سوال) ۳- فرضیه‌سازی ۴- آزمایش و جمع‌آوری اطلاعات ۵- نتیجه‌گیری."
+            },
+            {
+                id: "q7",
+                lesson: 1,
+                type: "mcq",
+                question: "کدام‌یک از جملات زیر یک «فرضیه» محسوب می‌شود؟",
+                options: [
+                    "چرا برگ درختان در پاییز زرد می‌شود؟",
+                    "به نظر من اگر موشک کاغذی را با کاغذ نازک‌تر بسازیم، مسافت بیشتری پرواز می‌کند.",
+                    "موشک کاغذی اول ۵ متر و موشک دوم ۳ متر پرواز کرد.",
+                    "کاغذ آچار سفیدرنگ و مستطیلی است."
+                ],
+                correctIndex: 1,
+                explanation: "جمله‌ای که با «به نظر من اگر...» یک رابطه احتمالی را پیش‌بینی می‌کند، «فرضیه» است. جمله اول «مسئله» و دو جمله آخر «مشاهده و ثبت داده» هستند."
+            },
+            {
+                id: "q8",
+                lesson: 1,
+                type: "mcq",
+                question: "در آزمایش بررسی تاثیر «طول بال موشک کاغذی» بر زمان پرواز، کدام مورد باید ثابت بماند؟",
+                options: [
+                    "طول بال موشک",
+                    "جنس کاغذ و وزن کلی برگه",
+                    "مدت زمان پرواز موشک",
+                    "نتیجه آزمایش"
+                ],
+                correctIndex: 1,
+                explanation: "وقتی اثر طول بال را بررسی می‌کنیم، جنس کاغذ، وزن کاغذ و نحوه پرتاب باید ثابت بمانند تا فقط اثر طول بال مشخص شود."
+            },
+            {
+                id: "q9",
+                lesson: 1,
+                type: "descriptive",
+                question: "مراحل شش‌گانه «روش علمی» را به ترتیب نام ببرید.",
+                answer: "۱) مشاهده دقیق  ۲) طرح مسئله (پرسش علمی)  ۳) فرضیه‌سازی (حدس علمی)  ۴) طراحی و انجام آزمایش  ۵) جمع‌آوری اطلاعات و یادداشت‌برداری  ۶) نتیجه‌گیری.",
+                explanation: "رعایت ترتیب این ۶ مرحله به دانشمندان کمک می‌کند تا به صورت منظم و دقیق به پاسخ پرسش‌های علمی دست یابند."
+            },
+            {
+                id: "q10",
+                lesson: 1,
+                type: "descriptive",
+                question: "«فرضیه» چیست و چه تفاوتی با «مشاهده» دارد؟",
+                answer: "مشاهده یعنی دریافت اطلاعات از محیط با استفاده از حواس پنج‌گانه یا ابزار؛ اما فرضیه یک حدس، گمان یا پاسخ پیشنهادی علمی به مسئله است که بر اساس دانسته‌های قبلی بیان می‌شود و باید با آزمایش بررسی گردد.",
+                explanation: "مشاهده یک واقعیت دیده‌شده است، ولی فرضیه یک پیش‌بینی است که ممکن است پس از آزمایش درست یا نادرست از آب دربیاید."
+            },
+            {
+                id: "q11",
+                lesson: 1,
+                type: "descriptive",
+                question: "چرا در آزمایش موشک‌های کاغذی، نباید هم‌زمان هم «جنس کاغذ» و هم «مدل ساخت موشک» را تغییر دهیم؟",
+                answer: "زیرا اگر دو عامل را هم‌زمان تغییر دهیم، در پایان آزمایش متوجه نمی‌شویم که تغییر در زمان پرواز موشک به خاطر جنس کاغذ بوده است یا به خاطر مدل ساخت آن!",
+                explanation: "در هر آزمایش علمی فقط باید یک متغیر را تغییر داد و سایر شرایط را یکسان نگه داشت."
+            },
+            {
+                id: "q12",
+                lesson: 1,
+                type: "descriptive",
+                question: "اگر پس از انجام دقیق آزمایش و تکرار آن، نتیجه آزمایش با «فرضیه» ما مخالف باشد، باید چه کار کنیم؟",
+                answer: "باید فرضیه قبلی را رد یا اصلاح کنیم و یک فرضیه جدید مطرح کرده و دوباره آن را آزمایش نماییم (نباید نتایج آزمایش را به دروغ تغییر دهیم).",
+                explanation: "رد شدن فرضیه در علم کاملاً طبیعی است و ما را به سمت کشف حقیقت هدایت می‌کند."
+            },
+            {
+                id: "q13",
+                lesson: 1,
+                type: "descriptive",
+                question: "منظور از «مشاهده» در روش علمی چیست؟ آیا مشاهده فقط با چشم انجام می‌شود؟",
+                answer: "خیر؛ مشاهده یعنی استفاده از تمام حواس پنج‌گانه (بینایی، شنوایی، بویایی، چشایی، لامسه) و همچنین ابزارهای علمی (مثل ذره‌بین، دماسنج، ترازو و زمان‌سنج) برای شناخت دقیق یک پدیده.",
+                explanation: "استفاده از ابزارهای اندازه‌گیری دقت مشاهده را بسیار بیشتر می‌کند."
+            },
+            {
+                id: "q14",
+                lesson: 1,
+                type: "descriptive",
+                question: "برای اینکه بدانیم «اضافه کردن گیره فلزی به نوک موشک کاغذی چه اثری بر مسافت پرواز آن دارد»، آزمایشی طراحی کنید.",
+                answer: "دو موشک کاملاً یکسان از نظر جنس و اندازه کاغذ می‌سازیم؛ به نوک یکی از آن‌ها گیره فلزی وصل می‌کنیم و به دیگری وصل نمی‌کنیم. هر دو را با نیروی یکسان پرتاب کرده و مسافت پرواز را چندین بار اندازه می‌گیریم و مقایسه می‌کنیم.",
+                explanation: "در این آزمایش، وجود گیره فلزی تنها عامل متغیر است."
+            },
+            {
+                id: "q15",
+                lesson: 1,
+                type: "descriptive",
+                question: "چرا هنگام انجام آزمایش علمی، یادداشت‌برداری و رسم جدول اهمیت زیادی دارد؟",
+                answer: "زیرا ثبت دقیق عددها و مشاهدات در جدول از فراموشی جلوگیری می‌کند و مقایسه نتایج تکرارهای مختلف آزمایش و نتیجه‌گیری نهایی را بسیار آسان‌تر و دقیق‌تر می‌سازد.",
+                explanation: "جمع‌آوری و ثبت منظم اطلاعات حلقه رابط بین آزمایش و نتیجه‌گیری است."
+            },
+            {
+                id: "q16",
+                lesson: 1,
+                type: "descriptive",
+                question: "آیا استفاده از روش علمی فقط مخصوص دانشمندان در آزمایشگاه است؟ با مثال توضیح دهید.",
+                answer: "خیر؛ همه ما در زندگی روزمره می‌توانیم از روش علمی استفاده کنیم. مثلاً وقتی تلویزیون روشن نمی‌شود (مشاهده و مسئله)، حدس می‌زنیم باتری کنترل تمام شده است (فرضیه) و باتری را عوض می‌کنیم (آزمایش).",
+                explanation: "تفکر علمی در حل مسائل روزمره زندگی به ما کمک می‌کند."
+            },
+
+            // ================= درس ۲: سرگذشت دفتر من (۱۶ سوال) =================
+            {
+                id: "q17",
+                lesson: 2,
+                type: "mcq",
+                question: "ماده اولیه اصلی برای تولید کاغذ در کارخانه‌های کاغذسازی کدام است؟",
+                options: [
+                    "سنگ‌های معدنی و فلزات",
+                    "تنه درختان و گیاهان (سلولز چوب)",
+                    "نفت خام و پلاستیک",
+                    "ماسه و شیشه"
+                ],
+                correctIndex: 1,
+                explanation: "ماده اصلی ساخت کاغذ، الیاف گیاهی و چوب تنه درختان است که پس از خرد شدن به خمیر کاغذ تبدیل می‌شود."
+            },
+            {
+                id: "q18",
+                lesson: 2,
+                type: "mcq",
+                question: "در کارخانه کاغذسازی، برای «رنگ‌بری و سفید کردن» خمیر قهوه‌ای‌رنگ کاغذ از چه موادی استفاده می‌شود؟",
+                options: [
+                    "نشاسته و نمک خوراکی",
+                    "آب‌اکسیژنه و کلر",
+                    "روغن و بنزین",
+                    "سرکه و جوش‌شیرین"
+                ],
+                correctIndex: 1,
+                explanation: "خمیر اولیه چوب قهوه‌ای یا زردرنگ است؛ در کارخانه با استفاده از مواد رنگ‌بر شیمیایی مانند «آب‌اکسیژنه» و «کلر» خمیر کاغذ را سفید می‌کنند."
+            },
+            {
+                id: "q19",
+                lesson: 2,
+                type: "mcq",
+                question: "کدام‌یک از موارد زیر جزو «منابع طبیعی تجدیدپذیر» به شمار می‌رود؟",
+                options: [
+                    "نفت و گاز طبیعی",
+                    "زغال‌سنگ و آهن",
+                    "جنگل‌ها و درختان",
+                    "طلا و مس"
+                ],
+                correctIndex: 2,
+                explanation: "درختان و جنگل‌ها جزو منابع طبیعی تجدیدپذیر هستند زیرا می‌توان با کاشت نهال جدید جایگزین درختان قطع‌شده را پرورش داد؛ اما نفت، زغال‌سنگ و فلزات تجدیدناپذیرند."
+            },
+            {
+                id: "q20",
+                lesson: 2,
+                type: "mcq",
+                question: "در کارخانه کاغذسازی، وظیفه «غلتک‌های بزرگ و گرم» چیست؟",
+                options: [
+                    "خرد کردن تنه درختان به تراشه‌های ریز",
+                    "آب‌گیری، فشرده کردن، صاف کردن و خشک کردن خمیر کاغذ",
+                    "اضافه کردن رنگ قهوه‌ای به چوب",
+                    "کندن پوست درختان"
+                ],
+                correctIndex: 1,
+                explanation: "خمیر کاغذ پس از سفید شدن، از میان غلتک‌های سنگین و داغ عبور می‌کند تا آب آن گرفته شود، خشک گردد و به صورت ورقه‌های صاف کاغذ درآید."
+            },
+            {
+                id: "q21",
+                lesson: 2,
+                type: "mcq",
+                question: "در مرحله اول آماده‌سازی چوب در کارخانه کاغذسازی، پس از کندن پوست درخت، تنه آن را به چه شکلی درمی‌آورند؟",
+                options: [
+                    "تراشه‌های ریز چوب (چیپس چوب)",
+                    "زغال چوب",
+                    "ورقه‌های آلومینیومی",
+                    "پودر شیشه"
+                ],
+                correctIndex: 0,
+                explanation: "تنه درختان پس از پوست‌کنی وارد دستگاه خردکن می‌شود و به قطعات کوچک به نام «چیپس چوب» (تراشه‌های چوب) تبدیل می‌گردد تا راحت‌تر به خمیر تبدیل شود."
+            },
+            {
+                id: "q22",
+                lesson: 2,
+                type: "mcq",
+                question: "کدام‌یک از کارهای زیر به «حفظ جنگل‌ها و صرفه‌جویی در مصرف کاغذ» کمک نمی‌کند؟",
+                options: [
+                    "استفاده از هر دو طرف برگه‌های دفتر برای نوشتن",
+                    "جداسازی کاغذهای باطله و تحویل به ایستگاه بازیافت",
+                    "مچاله کردن و دور ریختن برگه‌های سفید برای سرگرمی",
+                    "استفاده از کتاب‌های دست‌دوم و امانت گرفتن از کتابخانه"
+                ],
+                correctIndex: 2,
+                explanation: "مچاله کردن و دور انداختن برگه‌های سالم باعث اسراف کاغذ و قطع شدن درختان بیشتر می‌شود."
+            },
+            {
+                id: "q23",
+                lesson: 2,
+                type: "mcq",
+                question: "کدام گزینه درباره «بازیافت کاغذ» کاملاً درست است؟",
+                options: [
+                    "بازیافت کاغذ مصرف آب و برق را نسبت به تولید کاغذ از چوب افزایش می‌دهد",
+                    "کاغذهای باطله را نمی‌توان دوباره به خمیر کاغذ تبدیل کرد",
+                    "بازیافت کاغذ باعث صرفه‌جویی در مصرف آب، انرژی الکتریکی و حفظ درختان می‌شود",
+                    "از بازیافت کاغذ فقط شیشه تولید می‌کنند"
+                ],
+                correctIndex: 2,
+                explanation: "تولید کاغذ از کاغذهای باطله (بازیافت) علاوه بر نجات درختان، مقدار بسیار کمتری آب و برق نسبت به تولید کاغذ از چوب تازه مصرف می‌کند."
+            },
+            {
+                id: "q24",
+                lesson: 2,
+                type: "mcq",
+                question: "نخستین بار کدام قوم به روش ساخت کاغذ از الیاف گیاهان (پوست درخت توت و خیزران) دست یافتند و مسلمانان آن را گسترش دادند؟",
+                options: [
+                    "چینی‌ها",
+                    "رومی‌ها",
+                    "یونانی‌ها",
+                    "وایکینگ‌ها"
+                ],
+                correctIndex: 0,
+                explanation: "چینی‌ها نخستین کسانی بودند که از الیاف گیاهان کاغذ ساختند و سپس مسلمانان و ایرانیان کارخانه‌های کاغذسازی (مانند سمرقند) را رونق دادند."
+            },
+            {
+                id: "q25",
+                lesson: 2,
+                type: "descriptive",
+                question: "مراحل تهیه کاغذ از چوب درختان در کارخانه کاغذسازی را به ترتیب توضیح دهید.",
+                answer: "۱) بریدن درختان و حمل به کارخانه ۲) کندن پوست درخت و خرد کردن چوب به صورت تراشه (چیپس چوب) ۳) پختن تراشه‌ها با آب و مواد شیمیایی و تهیه خمیر کاغذ ۴) شست‌وشو و بی‌رنگ کردن (سفید کردن) خمیر با کلر یا آب‌اکسیژنه ۵) آب‌گیری و خشک کردن با غلتک‌های بزرگ ۶) برش و بسته‌بندی.",
+                explanation: "در این فرآیند، هم تغییرات فیزیکی (خرد کردن و خشک کردن) و هم تغییرات شیمیایی (پختن و رنگ‌بری) رخ می‌دهد."
+            },
+            {
+                id: "q26",
+                lesson: 2,
+                type: "descriptive",
+                question: "تفاوت «منابع طبیعی تجدیدپذیر» و «منابع طبیعی تجدیدناپذیر» چیست؟ برای هر کدام دو مثال بزنید.",
+                answer: "منابع تجدیدپذیر منابعی هستند که پس از مصرف دوباره جایگزین می‌شوند (مانند جنگل‌ها/درختان، نور خورشید و باد)؛ اما منابع تجدیدناپذیر به مقدار محدودی در زمین وجود دارند و تشکیل دوباره آن‌ها میلیون‌ها سال طول می‌کشد (مانند نفت، زغال‌سنگ و معادن فلزات).",
+                explanation: "اگر درختان را بی‌رویه قطع کنیم و نهال نکاریم، حتی منابع تجدیدپذیر هم در خطر نابودی قرار می‌گیرند."
+            },
+            {
+                id: "q27",
+                lesson: 2,
+                type: "descriptive",
+                question: "چهار مورد از فواید مهم «بازیافت کاغذ» را بنویسید.",
+                answer: "۱) جلوگیری از قطع بی‌رویه درختان و حفظ جنگل‌ها ۲) صرفه‌جویی چشمگیر در مصرف آب ۳) صرفه‌جویی در مصرف برق و انرژی ۴) کاهش حجم زباله‌ها و کاهش آلودگی محیط زیست.",
+                explanation: "بازیافت هر تن کاغذ باطله از قطع شدن حدود ۱۷ اصله درخت جلوگیری می‌کند."
+            },
+            {
+                id: "q28",
+                lesson: 2,
+                type: "descriptive",
+                question: "انسان‌های گذشته قبل از اختراع کاغذ، مطالب خود را روی چه چیزهایی می‌نوشتند و عیب آن‌ها چه بود؟",
+                answer: "روی سنگ، دیوار غارها، لوح‌های گِلی، پوست جانوران، چوب و برگ درختان (مثل پاپیروس) می‌نوشتند. عیب آن‌ها این بود که بسیار سنگین، جاگیر، شکننده یا گران‌قیمت بودند و حمل و نگهداری آن‌ها سخت بود.",
+                explanation: "اختراع کاغذ باعث شد نوشتن، کتابت و گسترش دانش بسیار آسان و ارزان شود."
+            },
+            {
+                id: "q29",
+                lesson: 2,
+                type: "descriptive",
+                question: "چرا علاوه بر کاغذ، بازیافت «فلزات و پلاستیک‌ها» نیز اهمیت بسیار زیادی دارد؟",
+                answer: "زیرا فلزات (از سنگ معدن) و پلاستیک‌ها (از نفت خام) از منابع طبیعی تجدیدناپذیر تهیه می‌شوند که رو به پایان هستند و همچنین رها شدن پلاستیک در طبیعت صدها سال محیط زیست را آلوده می‌کند.",
+                explanation: "بازیافت فلزات و پلاستیک هم منابع زیرزمینی را حفظ می‌کند و هم انرژی زیادی صرفه‌جویی می‌نماید."
+            },
+            {
+                id: "q30",
+                lesson: 2,
+                type: "descriptive",
+                question: "جنگل‌ها و درختان علاوه بر تامین چوب و کاغذ، چه فواید دیگری برای زمین و موجودات زنده دارند؟",
+                answer: "تولید اکسیژن و تصفیه هوا، زیستگاه جانوران، جلوگیری از سیل و فرسایش خاک، تلطیف آب و هوا و تامین میوه و داروهای گیاهی.",
+                explanation: "به همین دلیل جنگل‌ها را «ریه‌های سبز زمین» می‌نامند."
+            },
+            {
+                id: "q31",
+                lesson: 2,
+                type: "descriptive",
+                question: "شما به عنوان یک دانش‌آموز پایه ششم، با چه روش‌هایی می‌توانید در مدرسه و خانه مصرف کاغذ را کاهش دهید؟",
+                answer: "۱) استفاده از هر دو روی برگه‌های دفتر ۲) استفاده از برگه‌های سفید باقی‌مانده سال قبل به عنوان چک‌نویس ۳) پاره نکردن برگه‌های دفتر ۴) انداختن کاغذهای باطله در سطل مخصوص بازیافت.",
+                explanation: "کاهش مصرف، استفاده مجدد و بازیافت سه اصل طلایی حفاظت از منابع طبیعی هستند."
+            },
+            {
+                id: "q32",
+                lesson: 2,
+                type: "descriptive",
+                question: "منظور از «چیپس چوب» در کارخانه کاغذسازی چیست و چرا چوب را به این شکل درمی‌آورند؟",
+                answer: "چیپس چوب همان تراشه‌ها و قطعات بسیار کوچک چوب است. تنه درختان را به تراشه‌های ریز تبدیل می‌کنند تا آب و مواد شیمیایی به راحتی به درون بافت چوب نفوذ کند و سریع‌تر به خمیر کاغذ تبدیل شود.",
+                explanation: "خرد شدن چوب به تراشه یک تغییر فیزیکی است که سطح تماس چوب را افزایش می‌دهد."
+            },
+
+            // ================= درس ۳: کارخانه کاغذسازی (۱۶ سوال) =================
+            {
+                id: "q33",
+                lesson: 3,
+                type: "mcq",
+                question: "کدام‌یک از تغییرات زیر در کارخانه کاغذسازی یک «تغییر شیمیایی» است؟",
+                options: [
+                    "تبدیل تنه درخت به تراشه‌های ریز چوب",
+                    "سفید کردن و رنگ‌بری خمیر کاغذ با آب‌اکسیژنه و کلر",
+                    "گرفتن آب خمیر کاغذ با غلتک‌های فشرده",
+                    "برش دادن ورقه‌های بزرگ کاغذ در پایان کار"
+                ],
+                correctIndex: 1,
+                explanation: "رنگ‌بری و سفید کردن خمیر کاغذ با آب‌اکسیژنه یا کلر، خاصیت و ساختار رنگی ماده را تغییر می‌دهد و یک «تغییر شیمیایی» است؛ اما خرد کردن، آب‌گیری و برش کاغذ «تغییر فیزیکی» هستند."
+            },
+            {
+                id: "q34",
+                lesson: 3,
+                type: "mcq",
+                question: "مواد اسیدی مانند آب‌لیمو و سرکه، رنگ کاغذ پی‌اچ (شناسگر) را به چه رنگی درمی‌آورند؟",
+                options: [
+                    "آبی یا بنفش تیره",
+                    "قرمز یا نارنجی",
+                    "سبز لجنی",
+                    "سیاه"
+                ],
+                correctIndex: 1,
+                explanation: "اسیدها (مانند سرکه، آب‌لیمو و جوهر نمک) مزه ترش دارند و رنگ کاغذ پی‌اچ را به طیف «قرمز یا نارنجی» تغییر می‌دهند."
+            },
+            {
+                id: "q35",
+                lesson: 3,
+                type: "mcq",
+                question: "کدام‌یک از مواد زیر خاصیت «بازی (قلیایی)» دارد و در تماس با پوست دست حالت لیز و صابونی ایجاد می‌کند؟",
+                options: [
+                    "آب‌لیمو",
+                    "سرکه سفید",
+                    "مایع ظرف‌شویی و محلول جوش‌شیرین",
+                    "آب مقطر خالص"
+                ],
+                correctIndex: 2,
+                explanation: "بازها (مانند مایع ظرف‌شویی، صابون، شامپو، وایتکس و جوش‌شیرین) مزه تلخ دارند، در تماس با دست لیز هستند و کاغذ پی‌اچ را «آبی یا بنفش» می‌کنند."
+            },
+            {
+                id: "q36",
+                lesson: 3,
+                type: "mcq",
+                question: "چرا در کارخانه کاغذسازی به خمیر کاغذ «نشاسته» و مواد دیگر اضافه می‌کنند؟",
+                options: [
+                    "برای اینکه کاغذ بوی خوبی بدهد",
+                    "برای اینکه کاغذ در برابر نفوذ آب مقاوم شود و جوهر خودکار روی آن پخش نشود",
+                    "برای اینکه کاغذ سریع‌تر در آب حل شود",
+                    "برای اینکه کاغذ به رنگ قهوه‌ای درآید"
+                ],
+                correctIndex: 1,
+                explanation: "دستمال کاغذی نشاسته ندارد و آب را سریع جذب می‌کند، اما به کاغذ تحریر «نشاسته» می‌زنند تا مقاومتش در برابر نفوذ آب بالا برود و هنگام نوشتن، جوهر روی آن پخش نشود."
+            },
+            {
+                id: "q37",
+                lesson: 3,
+                type: "mcq",
+                question: "از ترکیب «سرکه» (اسید) و «جوش‌شیرین» (باز) چه نوع تغییری رخ می‌دهد و چه گازی تولید می‌شود؟",
+                options: [
+                    "تغییر فیزیکی - گاز اکسیژن",
+                    "تغییر شیمیایی - گاز کربن دی‌اکسید",
+                    "تغییر فیزیکی - بخار آب",
+                    "هیچ واکنشی رخ نمی‌دهد"
+                ],
+                correctIndex: 1,
+                explanation: "واکنش سرکه و جوش‌شیرین یک «تغییر شیمیایی» است که باعث قل‌قل کردن و تولید ماده جدیدی به نام «گاز کربن دی‌اکسید» می‌شود."
+            },
+            {
+                id: "q38",
+                lesson: 3,
+                type: "mcq",
+                question: "کدام‌یک از گزینه‌های زیر درباره تفاوت «آب» و «آب‌اکسیژنه» درست است؟",
+                options: [
+                    "آب و آب‌اکسیژنه دقیقاً یک ماده هستند و هیچ فرقی ندارند",
+                    "هر دو مایع و بی‌رنگ هستند، اما آب‌اکسیژنه خاصیت رنگ‌بری دارد و برخلاف آب، خوردن آن خطرناک و سمی است",
+                    "آب‌اکسیژنه جامد و قهوه‌ای‌رنگ است",
+                    "آب معمولی خمیر کاغذ را سفید و بی‌رنگ می‌کند"
+                ],
+                correctIndex: 1,
+                explanation: "آب و آب‌اکسیژنه هر دو مایع و شفاف (بی‌رنگ) هستند، اما دو ماده شیمیایی کاملاً متفاوت‌اند؛ آب‌اکسیژنه رنگ‌بر و اکسیدکننده قوی است و آشامیدنی نیست."
+            },
+            {
+                id: "q39",
+                lesson: 3,
+                type: "mcq",
+                question: "برای تشخیص اسید یا باز بودن مواد در خانه، از عصاره کدام گیاه می‌توان به عنوان «شناسگر طبیعی» استفاده کرد؟",
+                options: [
+                    "برگ کاهو",
+                    "کلم سرخ (کلم بنفش)",
+                    "سیب‌زمینی",
+                    "پیاز سفید"
+                ],
+                correctIndex: 1,
+                explanation: "عصاره «کلم سرخ» یک شناسگر طبیعی اسید و باز است که در محیط اسیدی به رنگ قرمز/صورتی و در محیط بازی به رنگ آبی/سبز درمی‌آید."
+            },
+            {
+                id: "q40",
+                lesson: 3,
+                type: "mcq",
+                question: "اگر اسیدهای صنعتی غلیظ را روی سنگ مرمر یا فلز آهن بریزیم چه اتفاقی می‌افتد؟",
+                options: [
+                    "سنگ و آهن را براق و محکم‌تر می‌کند",
+                    "باعث خورده شدن سنگ و فلز و ایجاد تغییر شیمیایی و حباب گاز می‌شود",
+                    "هیچ تغییری ایجاد نمی‌شود",
+                    "تبدیل به یخ می‌شود"
+                ],
+                correctIndex: 1,
+                explanation: "اسیدها خاصیت خورندگی دارند و با فلزات (مثل آهن و روی) و سنگ مرمر واکنش شیمیایی می‌دهند و آن‌ها را می‌خورند."
+            },
+            {
+                id: "q41",
+                lesson: 3,
+                type: "descriptive",
+                question: "تفاوت «تغییر فیزیکی» و «تغییر شیمیایی» چیست؟ برای هر کدام دو مثال بزنید.",
+                answer: "در تغییر فیزیکی فقط شکل، اندازه یا حالت ماده تغییر می‌کند و ماده جدیدی به وجود نمی‌آید (مثل خرد کردن چوب، پاره کردن کاغذ، ذوب شدن یخ)؛ اما در تغییر شیمیایی، جنس ماده عوض شده و ماده جدیدی با خواص جدید تولید می‌شود (مثل سوختن کاغذ، زنگ زدن آهن، سفید کردن خمیر کاغذ با آب‌اکسیژنه).",
+                explanation: "در تغییر شیمیایی معمولاً تغییر رنگ، آزاد شدن گاز، تغییر دما یا ایجاد رسوب دیده می‌شود."
+            },
+            {
+                id: "q42",
+                lesson: 3,
+                type: "descriptive",
+                question: "سه ویژگی مهم «اسیدها» و سه ویژگی مهم «بازها» را با هم مقایسه کنید.",
+                answer: "ویژگی اسیدها: ۱) مزه ترش دارند ۲) کاغذ پی‌اچ را قرمز یا نارنجی می‌کنند ۳) با فلزات و سنگ مرمر واکنش می‌دهند (مثل سرکه و آب‌لیمو). ویژگی بازها: ۱) مزه تلخ دارند ۲) حالت صابونی و لیز دارند ۳) کاغذ پی‌اچ را آبی یا بنفش می‌کنند (مثل صابون، مایع ظرف‌شویی و جوش‌شیرین).",
+                explanation: "توجه: هرگز نباید اسیدها و بازهای صنعتی و آزمایشگاهی را چشید یا بدون دستکش لمس کرد!"
+            },
+            {
+                id: "q43",
+                lesson: 3,
+                type: "descriptive",
+                question: "چرا دستمال کاغذی آب را به سرعت جذب می‌کند و پاره می‌شود، اما کاغذ دفتر تحریر در برابر آب مقاوم‌تر است؟",
+                answer: "زیرا در کارخانه کاغذسازی به خمیر کاغذ تحریر موادی مانند «نشاسته» اضافه می‌کنند تا منافذ کاغذ پر شود و در برابر نفوذ آب و پخش شدن جوهر مقاوم گردد؛ ولی به خمیر دستمال کاغذی نشاسته اضافه نمی‌کنند تا قدرت جذب آب بالایی داشته باشد.",
+                explanation: "نوع مواد افزودنی به خمیر کاغذ، کاربرد نهایی کاغذ را مشخص می‌کند."
+            },
+            {
+                id: "q44",
+                lesson: 3,
+                type: "descriptive",
+                question: "در مراحل تولید کاغذ، دو نمونه «تغییر فیزیکی» و دو نمونه «تغییر شیمیایی» را نام ببرید.",
+                answer: "تغییرات فیزیکی در کاغذسازی: ۱) خرد کردن تنه درخت به چیپس چوب ۲) خشک کردن و صاف کردن خمیر با غلتک و برش کاغذ. تغییرات شیمیایی در کاغذسازی: ۱) پختن چوب با مواد شیمیایی برای تهیه خمیر ۲) رنگ‌بری و سفید کردن خمیر با کلر و آب‌اکسیژنه.",
+                explanation: "کارخانه کاغذسازی ترکیبی از فرآیندهای فیزیکی و شیمیایی است."
+            },
+            {
+                id: "q45",
+                lesson: 3,
+                type: "descriptive",
+                question: "«کاغذ پی‌اچ (pH)» چیست و چه کاربردی دارد؟",
+                answer: "کاغذ پی‌اچ یک کاغذ شناسگر آزمایشگاهی است که برای تشخیص اسیدی، بازی یا خنثی بودن محلول‌ها و مقایسه قدرت اسیدها و بازها بدون نیاز به چشیدن یا لمس کردن آن‌ها استفاده می‌شود.",
+                explanation: "در کاغذ پی‌اچ، عدد ۷ خنثی (مثل آب مقطر)، اعداد کمتر از ۷ اسیدی (رنگ قرمز/نارنجی) و اعداد بیشتر از ۷ بازی (رنگ آبی/بنفش) هستند."
+            },
+            {
+                id: "q46",
+                lesson: 3,
+                type: "descriptive",
+                question: "چگونه می‌توانیم در آزمایشگاه تشخیص دهیم که در یک کاغذ، «نشاسته» به کار رفته است یا خیر؟",
+                answer: "با چکاندن چند قطره محلول «لوگول (محلول یُد)» روی کاغذ؛ اگر در کاغذ نشاسته وجود داشته باشد، رنگ محلول لوگول از قهوه‌ای به «آبی تیره یا بنفش مایل به سیاه» تغییر می‌کند.",
+                explanation: "محلول لوگول (ید) معرف و شناسگر اختصاصی نشاسته است."
+            },
+            {
+                id: "q47",
+                lesson: 3,
+                type: "descriptive",
+                question: "ماده «خنثی» به چه ماده‌ای گفته می‌شود؟ دو مثال بزنید.",
+                answer: "به ماده‌ای که نه خاصیت اسیدی دارد و نه خاصیت بازی، ماده «خنثی» می‌گویند؛ مانند آب مقطر خالص، محلول نمک خوراکی در آب و الکل طبی.",
+                explanation: "مواد خنثی رنگ کاغذ پی‌اچ را به قرمز یا آبی تغییر نمی‌دهند (در محدوده زرد/سبز عدد ۷ باقی می‌ماند)."
+            },
+            {
+                id: "q48",
+                lesson: 3,
+                type: "descriptive",
+                question: "هنگام کار با اسیدها و بازهای صنعتی و خانگی (مثل جوهر نمک و سفیدکننده)، رعایت چه نکات ایمنی ضروری است؟",
+                answer: "۱) استفاده از دستکش، عینک ایمنی و ماسک ۲) استفاده در محیطی با تهویه مناسب و هوای آزاد ۳) هرگز ترکیب نکردن جوهر نمک و وایتکس با یکدیگر (چون گاز بسیار سمی کلر آزاد می‌کند) ۴) دور نگه داشتن از دسترس کودکان.",
+                explanation: "بخارهای اسیدها و بازهای قوی به پوست، چشم و ریه آسیب جدی می‌رساند."
+            }
+        ];
+
+        /**************************************************************
+         * 2. LEITNER INTERVALS & CONSTANTS
+         **************************************************************/
+        // Leitner boxes 1 to 5 intervals in days:
+        const LEITNER_INTERVALS = {
+            1: 1,   // Box 1: Ask again in 1 day
+            2: 2,   // Box 2: Ask again in 2 days
+            3: 4,   // Box 3: Ask again in 4 days
+            4: 8,   // Box 4: Ask again in 8 days
+            5: 15   // Box 5: Ask again in 15 days
+        };
+
+        const POINTS_PER_CORRECT = 10; // ۱۰ امتیاز به ازای هر پاسخ صحیح
+        const STORAGE_KEY = "SCIENCE_GRADE6_LEITNER_APP_V1";
+        const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+        /**************************************************************
+         * 3. WEB AUDIO SYNTHESIZER (No external audio files needed)
+         **************************************************************/
+        class SoundEffects {
+            constructor() {
+                this.enabled = true;
+                this.ctx = null;
+            }
+            init() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) this.ctx = new AudioCtx();
+                }
+            }
+            playCorrect() {
+                if (!this.enabled) return;
+                try {
+                    this.init();
+                    const now = this.ctx.currentTime;
+                    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                    notes.forEach((freq, i) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = "triangle";
+                        osc.frequency.setValueAtTime(freq, now + i * 0.08);
+                        gain.gain.setValueAtTime(0.18, now + i * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.25);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + i * 0.08);
+                        osc.stop(now + i * 0.08 + 0.26);
+                    });
+                } catch (e) {}
+            }
+            playWrong() {
+                if (!this.enabled) return;
+                try {
+                    this.init();
+                    const now = this.ctx.currentTime;
+                    const freqs = [300, 220];
+                    freqs.forEach((freq, i) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = "sawtooth";
+                        osc.frequency.setValueAtTime(freq, now + i * 0.14);
+                        gain.gain.setValueAtTime(0.12, now + i * 0.14);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.14 + 0.25);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + i * 0.14);
+                        osc.stop(now + i * 0.14 + 0.26);
+                    });
+                } catch (e) {}
+            }
+            playClick() {
+                if (!this.enabled) return;
+                try {
+                    this.init();
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = "sine";
+                    osc.frequency.setValueAtTime(600, now);
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.07);
+                } catch (e) {}
+            }
+        }
+        const sfx = new SoundEffects();
+
+        /**************************************************************
+         * 4. CONFETTI ANIMATION ENGINE
+         **************************************************************/
+        function launchConfetti() {
+            const canvas = document.getElementById("confettiCanvas");
+            if (!canvas) return;
+            const ctx = canvas.getContext("2d");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const colors = ["#10b981", "#38bdf8", "#fbbf24", "#a855f7", "#f43f5e", "#4ade80"];
+            for (let i = 0; i < 65; i++) {
+                particles.push({
+                    x: canvas.width / 2 + (Math.random() - 0.5) * 180,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 14,
+                    vy: -Math.random() * 14 - 4,
+                    size: Math.random() * 8 + 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    rot: Math.random() * 360,
+                    vRot: (Math.random() - 0.5) * 12
+                });
+            }
+
+            let frame = 0;
+            function render() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let active = false;
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.42; // gravity
+                    p.rot += p.vRot;
+                    if (p.y < canvas.height + 20) active = true;
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rot * Math.PI) / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    ctx.restore();
+                });
+                frame++;
+                if (active && frame < 110) {
+                    requestAnimationFrame(render);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            requestAnimationFrame(render);
+        }
+
+        /**************************************************************
+         * 5. APPLICATION STATE & STORAGE MANAGEMENT
+         **************************************************************/
+        let appData = {
+            currentStudentId: null,
+            selectedAvatar: "🧑‍🔬",
+            customQuestions: [],
+            students: {}
+            /*
+               Each student in `students[id]`:
+               {
+                   id: string,
+                   name: string,
+                   avatar: string,
+                   score: number,
+                   virtualDayOffset: number, // simulated days added for testing Leitner
+                   createdAt: number,
+                   lastActive: number,
+                   cards: {
+                       [questionId]: {
+                           state: 'new' | 'leitner' | 'mastered',
+                           box: 0..5,           // 1..5 when in leitner, 6 when mastered
+                           nextReviewDay: number, // Day index when card is due
+                           lastAnsweredDay: number,
+                           correctCount: number,
+                           wrongCount: number
+                       }
+                   }
+               }
+            */
+        };
+
+        // UI runtime state
+        let activeQueue = [];
+        let currentQueueIndex = 0;
+        let currentQuestionAnswered = false;
+        let selectedLeitnerListFilter = "all"; // 'all' | 'due' | 'mastered' | 1..5
+
+        function loadAppData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    appData = Object.assign(appData, parsed);
+                }
+            } catch (e) {
+                console.error("Failed to load localStorage data:", e);
+            }
+        }
+
+        function saveAppData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            } catch (e) {
+                console.error("Failed to save localStorage data:", e);
+            }
+        }
+
+        function getAllQuestions() {
+            return [...DEFAULT_QUESTIONS, ...(appData.customQuestions || [])];
+        }
+
+        function getCurrentStudent() {
+            if (!appData.currentStudentId || !appData.students[appData.currentStudentId]) {
+                return null;
+            }
+            return appData.students[appData.currentStudentId];
+        }
+
+        /**
+         * Calculates the current Day Index for the student:
+         * Combines real elapsed calendar days since profile creation + virtualDayOffset (from "+1 Day" button)
+         */
+        function getStudentCurrentDay(student) {
+            if (!student) return 1;
+            const realDaysElapsed = Math.floor((Date.now() - (student.createdAt || Date.now())) / MS_PER_DAY);
+            return 1 + Math.max(0, realDaysElapsed) + (student.virtualDayOffset || 0);
+        }
+
+        function getCardState(student, qId) {
+            if (!student.cards[qId]) {
+                return {
+                    state: "new",
+                    box: 0,
+                    nextReviewDay: 0,
+                    lastAnsweredDay: 0,
+                    correctCount: 0,
+                    wrongCount: 0
+                };
+            }
+            return student.cards[qId];
+        }
+
+        function isCardDueToday(student, card) {
+            if (!card || card.state !== "leitner") return false;
+            const today = getStudentCurrentDay(student);
+            return today >= card.nextReviewDay;
+        }
+
+        function getRankTitle(score) {
+            if (score >= 400) return "🏆 پروفسور علوم ششم";
+            if (score >= 250) return "🌟 دانشمند برجسته";
+            if (score >= 150) return "🔬 کاوشگر ماهر";
+            if (score >= 60)  return "🧪 آزمایشگر پرتلاش";
+            return "🌱 پژوهشگر جوان";
+        }
+
+        /**************************************************************
+         * 6. TOAST & CUSTOM CONFIRM HELPERS
+         **************************************************************/
+        function showToast(message, type = "info") {
+            const container = document.getElementById("toastContainer");
+            const toast = document.createElement("div");
+            let colors = "bg-slate-900/95 border-emerald-500/50 text-emerald-200";
+            let icon = "fa-circle-info text-emerald-400";
+            if (type === "success") {
+                colors = "bg-emerald-950/95 border-emerald-400 text-emerald-100";
+                icon = "fa-circle-check text-emerald-400";
+            } else if (type === "warning") {
+                colors = "bg-amber-950/95 border-amber-400 text-amber-100";
+                icon = "fa-clock text-amber-400";
+            } else if (type === "error") {
+                colors = "bg-rose-950/95 border-rose-400 text-rose-100";
+                icon = "fa-box-archive text-rose-400";
+            }
+
+            toast.className = `p-3.5 rounded-2xl border shadow-xl flex items-center gap-2.5 text-xs sm:text-sm font-bold slide-in ${colors}`;
+            toast.innerHTML = `<i class="fa-solid ${icon} text-base"></i><span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transition = "opacity 0.3s ease";
+                setTimeout(() => toast.remove(), 300);
+            }, 3400);
+        }
+
+        function showCustomConfirm(title, message, onConfirm) {
+            const modal = document.getElementById("customConfirmModal");
+            document.getElementById("confirmModalTitle").textContent = title;
+            document.getElementById("confirmModalMessage").textContent = message;
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+
+            const yesBtn = document.getElementById("confirmModalYesBtn");
+            const noBtn = document.getElementById("confirmModalNoBtn");
+
+            const cleanup = () => {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+                yesBtn.onclick = null;
+                noBtn.onclick = null;
+            };
+
+            yesBtn.onclick = () => {
+                cleanup();
+                onConfirm();
+            };
+            noBtn.onclick = () => {
+                cleanup();
+            };
+        }
+
+        /**************************************************************
+         * 7. LOGIN & PROFILE SWITCHING LOGIC
+         **************************************************************/
+        function renderLoginScreen() {
+            const savedList = document.getElementById("savedProfilesList");
+            const savedSection = document.getElementById("savedProfilesSection");
+            const studentArr = Object.values(appData.students).sort((a, b) => (b.lastActive || 0) - (a.lastActive || 0));
+
+            if (studentArr.length > 0) {
+                savedSection.classList.remove("hidden");
+                savedList.innerHTML = "";
+                studentArr.forEach(st => {
+                    const btn = document.createElement("button");
+                    btn.type = "button";
+                    btn.className = "p-3 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 hover:border-emerald-400/60 transition flex items-center justify-between text-right group";
+                    btn.innerHTML = `
+                        <div class="flex items-center gap-2.5 overflow-hidden">
+                            <span class="text-2xl">${st.avatar || "🧑‍🔬"}</span>
+                            <div class="truncate">
+                                <div class="font-bold text-sm text-white group-hover:text-emerald-300 truncate">${st.name}</div>
+                                <div class="text-[11px] text-slate-400">روز ${getStudentCurrentDay(st)} آموزش</div>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 text-xs font-black shrink-0">
+                            ${st.score} امتیاز
+                        </span>
+                    `;
+                    btn.addEventListener("click", () => {
+                        sfx.playClick();
+                        loginAsStudent(st.id);
+                    });
+                    savedList.appendChild(btn);
+                });
+            } else {
+                savedSection.classList.add("hidden");
+            }
+        }
+
+        function loginOrCreateStudent(name, avatar) {
+            const cleanName = name.trim();
+            if (!cleanName) return;
+
+            // Check if a student with this exact name already exists
+            let existing = Object.values(appData.students).find(
+                s => s.name.trim().toLowerCase() === cleanName.toLowerCase()
+            );
+
+            if (existing) {
+                existing.avatar = avatar || existing.avatar;
+                existing.lastActive = Date.now();
+                appData.currentStudentId = existing.id;
+                saveAppData();
+                showToast(`خوش برگشتی ${existing.name}! ادامه بازی از آخرین وضعیت شما بارگذاری شد.`, "success");
+            } else {
+                const newId = "st_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+                appData.students[newId] = {
+                    id: newId,
+                    name: cleanName,
+                    avatar: avatar || "🧑‍🔬",
+                    score: 0,
+                    virtualDayOffset: 0,
+                    createdAt: Date.now(),
+                    lastActive: Date.now(),
+                    cards: {}
+                };
+                appData.currentStudentId = newId;
+                saveAppData();
+                showToast(`خوش آمدی ${cleanName}! سفر علمی شما آغاز شد.`, "success");
+            }
+
+            enterAppView();
+        }
+
+        function loginAsStudent(studentId) {
+            if (!appData.students[studentId]) return;
+            appData.currentStudentId = studentId;
+            appData.students[studentId].lastActive = Date.now();
+            saveAppData();
+            showToast(`خوش برگشتی ${appData.students[studentId].name}!`, "success");
+            enterAppView();
+        }
+
+        function enterAppView() {
+            document.getElementById("loginScreen").classList.add("hidden");
+            document.getElementById("appScreen").classList.remove("hidden");
+            buildQuestionQueue(true);
+            refreshAllUI();
+        }
+
+        function returnToLoginView() {
+            appData.currentStudentId = null;
+            saveAppData();
+            document.getElementById("appScreen").classList.add("hidden");
+            document.getElementById("loginScreen").classList.remove("hidden");
+            renderLoginScreen();
+        }
+
+        /**************************************************************
+         * 8. QUESTION QUEUE & SMART LEITNER SCHEDULING ENGINE
+         **************************************************************/
+        function buildQuestionQueue(resetIndex = false) {
+            const student = getCurrentStudent();
+            if (!student) return;
+
+            const mode = document.getElementById("modeFilterSelect").value;
+            const lessonFilter = document.getElementById("lessonFilterSelect").value;
+            const typeFilter = document.getElementById("typeFilterSelect").value;
+
+            const allQuestions = getAllQuestions();
+
+            // Filter by lesson and type first
+            let filtered = allQuestions.filter(q => {
+                if (lessonFilter !== "all" && String(q.lesson) !== String(lessonFilter)) return false;
+                if (typeFilter !== "all" && q.type !== typeFilter) return false;
+                return true;
+            });
+
+            // Filter & sort by mode
+            if (mode === "smart") {
+                // Priority 1: Leitner cards due today
+                // Priority 2: New (unseen) cards
+                const dueCards = [];
+                const newCards = [];
+                filtered.forEach(q => {
+                    const c = getCardState(student, q.id);
+                    if (c.state === "leitner" && isCardDueToday(student, c)) {
+                        dueCards.push(q);
+                    } else if (c.state === "new") {
+                        newCards.push(q);
+                    }
+                });
+                activeQueue = [...dueCards, ...newCards];
+            } else if (mode === "leitner_due") {
+                activeQueue = filtered.filter(q => {
+                    const c = getCardState(student, q.id);
+                    return c.state === "leitner" && isCardDueToday(student, c);
+                });
+            } else if (mode === "new_only") {
+                activeQueue = filtered.filter(q => getCardState(student, q.id).state === "new");
+            } else if (mode === "leitner_all") {
+                activeQueue = filtered.filter(q => getCardState(student, q.id).state === "leitner");
+            } else {
+                // 'all_practice'
+                activeQueue = [...filtered];
+            }
+
+            if (resetIndex || currentQueueIndex >= activeQueue.length) {
+                currentQueueIndex = 0;
+            }
+        }
+
+        /**
+         * Core Leitner & Scoring Processor:
+         * - Correct Answer:
+         *     If Multiple-Choice (mcq): +10 points!
+         *     If Descriptive (descriptive) "یادم هست": 0 points (only Leitner progression).
+         *     If question was 'new': marks as 'mastered' (box 6).
+         *     If question was in 'leitner': promotes to next box (box + 1) and schedules for `today + LEITNER_INTERVALS[nextBox]`,
+         *     or if it was in Box 5, promotes to 'mastered'!
+         * - Wrong Answer (MCQ wrong option OR Descriptive "یادم نیست"):
+         *     0 points.
+         *     Sends question into Leitner Box 1 (`box = 1`, `state = 'leitner'`)
+         *     Schedules `nextReviewDay = today + 1` (1 day later).
+         */
+        function processStudentAnswer(question, isCorrect) {
+            const student = getCurrentStudent();
+            if (!student || currentQuestionAnswered) return;
+            currentQuestionAnswered = true;
+
+            const isMcq = question.type === "mcq";
+            const today = getStudentCurrentDay(student);
+            const prevCard = getCardState(student, question.id);
+            let updatedCard = { ...prevCard, lastAnsweredDay: today };
+
+            let feedbackHeadline = "";
+            let scheduleBadgeText = "";
+            let scheduleBadgeClass = "";
+
+            if (isCorrect) {
+                sfx.playCorrect();
+                launchConfetti();
+
+                updatedCard.correctCount = (updatedCard.correctCount || 0) + 1;
+
+                // Award +10 points ONLY for Multiple-Choice (mcq) questions
+                if (isMcq) {
+                    student.score += POINTS_PER_CORRECT;
+
+                    // Pop score animation in header
+                    const scoreEl = document.getElementById("headerStudentScore");
+                    scoreEl.classList.remove("score-pop");
+                    void scoreEl.offsetWidth;
+                    scoreEl.classList.add("score-pop");
+                }
+
+                const scoreTextSuffix = isMcq ? ` (+${POINTS_PER_CORRECT} امتیاز)` : ` (ثبت در لایتنر - بدون امتیاز)`;
+
+                if (prevCard.state === "leitner") {
+                    // Was in Leitner box -> Advance to next box or Mastered
+                    if (prevCard.box < 5) {
+                        const nextBox = prevCard.box + 1;
+                        const intervalDays = LEITNER_INTERVALS[nextBox];
+                        updatedCard.state = "leitner";
+                        updatedCard.box = nextBox;
+                        updatedCard.nextReviewDay = today + intervalDays;
+
+                        feedbackHeadline = `آفرین! پاسخ صحیح${scoreTextSuffix} 🎉`;
+                        scheduleBadgeText = `ارتقا به خانه ${nextBox} لایتنر (پرسش بعدی: ${intervalDays} روز دیگر - روز ${updatedCard.nextReviewDay})`;
+                        scheduleBadgeClass = "bg-emerald-500/25 text-emerald-200 border border-emerald-400/50";
+                    } else {
+                        // Completed Box 5 -> Mastered!
+                        updatedCard.state = "mastered";
+                        updatedCard.box = 6;
+                        updatedCard.nextReviewDay = 0;
+
+                        feedbackHeadline = `فوق‌العاده! پاسخ صحیح${scoreTextSuffix} 🏆`;
+                        scheduleBadgeText = `خروج از لایتنر و تثبیت کامل در حافظه بلندمدت!`;
+                        scheduleBadgeClass = "bg-amber-500/25 text-amber-200 border border-amber-400/50";
+                    }
+                } else {
+                    // Was 'new' or already 'mastered'
+                    updatedCard.state = "mastered";
+                    updatedCard.box = 6;
+                    updatedCard.nextReviewDay = 0;
+
+                    feedbackHeadline = isMcq
+                        ? `عالی بود! پاسخ صحیح (+${POINTS_PER_CORRECT} امتیاز) 🌟`
+                        : `عالی بود! این سوال تشریحی را به خاطر داشتید 🌟`;
+                    scheduleBadgeText = `تثبیت‌شده ✅`;
+                    scheduleBadgeClass = "bg-emerald-500/25 text-emerald-200 border border-emerald-400/50";
+                }
+
+                if (isMcq) {
+                    showToast(`+۱۰ امتیاز دریافت کردید! مجموع امتیاز: ${student.score}`, "success");
+                } else {
+                    showToast(`وضعیت سوال تشریحی در لایتنر با موفقیت ارتقا یافت (بدون امتیاز).`, "success");
+                }
+
+            } else {
+                sfx.playWrong();
+                updatedCard.wrongCount = (updatedCard.wrongCount || 0) + 1;
+
+                // Move into Leitner Box 1 and schedule for 1 day later
+                const intervalDays = LEITNER_INTERVALS[1]; // 1 day
+                updatedCard.state = "leitner";
+                updatedCard.box = 1;
+                updatedCard.nextReviewDay = today + intervalDays;
+
+                feedbackHeadline = question.type === "mcq"
+                    ? `پاسخ نادرست بود! سوال وارد جعبه لایتنر شد 📦`
+                    : `اشکالی ندارد! سوال تشریحی وارد جعبه لایتنر شد 📦`;
+                scheduleBadgeText = `انتقال به خانه ۱ لایتنر (برنامه‌ریزی برای پرسش در ${intervalDays} روز آینده - روز ${updatedCard.nextReviewDay})`;
+                scheduleBadgeClass = "bg-rose-500/25 text-rose-200 border border-rose-400/50";
+
+                showToast(`این سوال وارد خانه ۱ لایتنر شد تا فردا (روز ${updatedCard.nextReviewDay}) دوباره از شما پرسیده شود.`, "error");
+            }
+
+            student.cards[question.id] = updatedCard;
+            student.lastActive = Date.now();
+            saveAppData();
+
+            // Display feedback box inside the card
+            const fbBox = document.getElementById("feedbackResultBox");
+            const fbTitle = document.getElementById("feedbackTitle");
+            const fbBadge = document.getElementById("feedbackScheduleBadge");
+            const fbExp = document.getElementById("feedbackExplanationText");
+
+            fbBox.className = `mt-5 p-4 rounded-2xl border slide-in ${
+                isCorrect
+                    ? "bg-emerald-950/50 border-emerald-500/50 text-emerald-100"
+                    : "bg-rose-950/50 border-rose-500/50 text-rose-100"
+            }`;
+            fbTitle.innerHTML = isCorrect
+                ? `<i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i><span>${feedbackHeadline}</span>`
+                : `<i class="fa-solid fa-boxes-packing text-rose-400 text-lg"></i><span>${feedbackHeadline}</span>`;
+            fbBadge.className = `text-xs px-3 py-1 rounded-full font-bold ${scheduleBadgeClass}`;
+            fbBadge.textContent = scheduleBadgeText;
+            fbExp.innerHTML = `<b class="text-white">نکته آموزشی:</b> ${question.explanation}`;
+            fbBox.classList.remove("hidden");
+
+            // Update header, stats, mini Leitner, and leaderboard without jumping away from the explanation yet
+            updateHeaderAndStatsUI();
+            renderMiniLeitnerBoxes();
+            renderDetailedLeitnerView();
+            renderLeaderboards();
+        }
+
+        /**************************************************************
+         * 9. RENDERING ACTIVE QUESTION CARD
+         **************************************************************/
+        function renderCurrentQuestion() {
+            const student = getCurrentStudent();
+            if (!student) return;
+
+            const cardContainer = document.getElementById("questionCardContainer");
+            const emptyContainer = document.getElementById("emptyQueueContainer");
+            const queueBadge = document.getElementById("queueCounterBadge");
+
+            if (activeQueue.length === 0) {
+                cardContainer.classList.add("hidden");
+                emptyContainer.classList.remove("hidden");
+                queueBadge.textContent = "۰ سوال در صف فعلی";
+                return;
+            }
+
+            cardContainer.classList.remove("hidden");
+            emptyContainer.classList.add("hidden");
+
+            if (currentQueueIndex < 0) currentQueueIndex = 0;
+            if (currentQueueIndex >= activeQueue.length) currentQueueIndex = 0;
+
+            const q = activeQueue[currentQueueIndex];
+            const cardState = getCardState(student, q.id);
+            const today = getStudentCurrentDay(student);
+            currentQuestionAnswered = false;
+
+            queueBadge.textContent = `سوال ${currentQueueIndex + 1} از ${activeQueue.length}`;
+            // Question Type Badge & Points Badge
+            const qTypeBadge = document.getElementById("qTypeBadge");
+            const qPointsBadge = document.getElementById("qPointsBadge");
+            if (q.type === "mcq") {
+                qTypeBadge.textContent = "📝 پرسش تستی (۴ گزینه‌ای)";
+                qTypeBadge.className = "px-3 py-1 rounded-xl text-xs font-extrabold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30";
+                if (qPointsBadge) {
+                    qPointsBadge.className = "flex items-center gap-1.5 text-amber-300 text-xs font-bold bg-amber-500/10 border border-amber-400/30 px-2.5 py-1 rounded-lg";
+                    qPointsBadge.innerHTML = `<i class="fa-solid fa-bolt"></i><span>پاسخ درست: +۱۰ امتیاز</span>`;
+                }
+            } else {
+                qTypeBadge.textContent = "💡 پرسش تشریحی (یادم هست / یادم نیست)";
+                qTypeBadge.className = "px-3 py-1 rounded-xl text-xs font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/30";
+                if (qPointsBadge) {
+                    qPointsBadge.className = "flex items-center gap-1.5 text-cyan-300 text-xs font-bold bg-cyan-500/10 border border-cyan-400/30 px-2.5 py-1 rounded-lg";
+                    qPointsBadge.innerHTML = `<i class="fa-solid fa-layer-group"></i><span>مرور تشریحی لایتنر (بدون امتیاز)</span>`;
+                }
+            }
+
+            // Leitner Status Badge on Card
+            const statusBadge = document.getElementById("qLeitnerStatusBadge");
+            if (cardState.state === "new") {
+                statusBadge.textContent = "✨ سوال جدید";
+                statusBadge.className = "px-3 py-1 rounded-xl text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30";
+            } else if (cardState.state === "leitner") {
+                const isDue = today >= cardState.nextReviewDay;
+                statusBadge.textContent = isDue
+                    ? `⏰ مرور موعد امروز (خانه ${cardState.box} لایتنر)`
+                    : `📦 در خانه ${cardState.box} لایتنر (برنامه‌ریزی: روز ${cardState.nextReviewDay})`;
+                statusBadge.className = isDue
+                    ? "px-3 py-1 rounded-xl text-xs font-bold bg-rose-500/25 text-rose-200 border border-rose-400/50 animate-pulse"
+                    : "px-3 py-1 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-200 border border-amber-400/40";
+            } else {
+                statusBadge.textContent = "🏆 تثبیت‌شده در حافظه";
+                statusBadge.className = "px-3 py-1 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+            }
+
+            // Question Text
+            document.getElementById("questionText").textContent = q.question;
+
+            // Hide feedback box initially
+            document.getElementById("feedbackResultBox").classList.add("hidden");
+
+            const mcqArea = document.getElementById("mcqArea");
+            const descArea = document.getElementById("descriptiveArea");
+
+            if (q.type === "mcq") {
+                mcqArea.classList.remove("hidden");
+                descArea.classList.add("hidden");
+
+                const optionsList = document.getElementById("mcqOptionsList");
+                optionsList.innerHTML = "";
+
+                const optionLabels = ["الف", "ب", "ج", "د"];
+                q.options.forEach((optText, idx) => {
+                    const btn = document.createElement("button");
+                    btn.type = "button";
+                    btn.className = "mcq-option w-full p-4 rounded-2xl bg-slate-900/85 border-2 border-slate-700/90 text-right flex items-center justify-between gap-3 text-sm sm:text-base font-bold text-slate-100";
+                    btn.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-600 flex items-center justify-center text-xs font-black text-cyan-300 shrink-0">
+                                ${optionLabels[idx] || idx + 1}
+                            </span>
+                            <span>${optText}</span>
+                        </div>
+                        <span class="option-status-icon text-lg"></span>
+                    `;
+
+                    btn.addEventListener("click", () => {
+                        if (currentQuestionAnswered) return;
+                        const isRight = idx === q.correctIndex;
+
+                        // Style all option buttons
+                        const allBtns = optionsList.querySelectorAll(".mcq-option");
+                        allBtns.forEach((b, bIdx) => {
+                            b.disabled = true;
+                            const iconSpan = b.querySelector(".option-status-icon");
+                            if (bIdx === q.correctIndex) {
+                                b.classList.add("correct");
+                                iconSpan.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+                            } else if (bIdx === idx && !isRight) {
+                                b.classList.add("wrong");
+                                iconSpan.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400"></i>`;
+                            }
+                        });
+
+                        processStudentAnswer(q, isRight);
+                    });
+
+                    optionsList.appendChild(btn);
+                });
+
+            } else {
+                // Descriptive Question
+                mcqArea.classList.add("hidden");
+                descArea.classList.remove("hidden");
+
+                document.getElementById("descriptiveStudentDraft").value = "";
+                document.getElementById("descriptiveThinkBox").classList.remove("hidden");
+                document.getElementById("descriptiveAnswerBox").classList.add("hidden");
+                document.getElementById("descriptiveActionButtons").classList.remove("hidden");
+                document.getElementById("descriptiveAnswerText").textContent = q.answer || q.explanation;
+            }
+        }
+
+        /**************************************************************
+         * 10. UI UPDATES: HEADER, STATS, LEITNER BOXES, LEADERBOARD
+         **************************************************************/
+        function updateHeaderAndStatsUI() {
+            const student = getCurrentStudent();
+            if (!student) return;
+
+            const today = getStudentCurrentDay(student);
+            document.getElementById("headerAvatar").textContent = student.avatar || "🧑‍🔬";
+            document.getElementById("headerStudentName").textContent = student.name;
+            document.getElementById("headerStudentScore").textContent = student.score;
+            document.getElementById("headerRankBadge").textContent = getRankTitle(student.score);
+            document.getElementById("currentDayLabel").textContent = `روز ${today} آموزش`;
+
+            const allQuestions = getAllQuestions();
+            let masteredCount = 0;
+            let inLeitnerCount = 0;
+            let dueTodayCount = 0;
+            let newCount = 0;
+
+            const lessonStats = {
+                1: { total: 0, mastered: 0 },
+                2: { total: 0, mastered: 0 },
+                3: { total: 0, mastered: 0 }
+            };
+
+            allQuestions.forEach(q => {
+                const c = getCardState(student, q.id);
+                if (lessonStats[q.lesson]) lessonStats[q.lesson].total++;
+
+                if (c.state === "mastered") {
+                    masteredCount++;
+                    if (lessonStats[q.lesson]) lessonStats[q.lesson].mastered++;
+                } else if (c.state === "leitner") {
+                    inLeitnerCount++;
+                    if (isCardDueToday(student, c)) dueTodayCount++;
+                } else {
+                    newCount++;
+                }
+            });
+
+            document.getElementById("statMasteredCount").textContent = masteredCount;
+            document.getElementById("statInLeitnerCount").textContent = inLeitnerCount;
+            document.getElementById("statDueTodayCount").textContent = dueTodayCount;
+            document.getElementById("statNewRemainingCount").textContent = newCount;
+
+            // Update Due Badge on Tab
+            const tabBadge = document.getElementById("tabLeitnerDueBadge");
+            if (dueTodayCount > 0) {
+                tabBadge.textContent = dueTodayCount;
+                tabBadge.classList.remove("hidden");
+            } else {
+                tabBadge.classList.add("hidden");
+            }
+
+            // Update Per-Lesson Progress Bars
+            [1, 2, 3].forEach(lNum => {
+                const st = lessonStats[lNum];
+                const pct = st.total > 0 ? Math.round((st.mastered / st.total) * 100) : 0;
+                document.getElementById(`progTextLesson${lNum}`).textContent = `${st.mastered} از ${st.total} (${pct}%)`;
+                document.getElementById(`progBarLesson${lNum}`).style.width = `${pct}%`;
+            });
+        }
+
+        function getLeitnerCounts(student) {
+            const counts = {
+                1: { total: 0, due: 0 },
+                2: { total: 0, due: 0 },
+                3: { total: 0, due: 0 },
+                4: { total: 0, due: 0 },
+                5: { total: 0, due: 0 },
+                mastered: 0
+            };
+            const allQuestions = getAllQuestions();
+            allQuestions.forEach(q => {
+                const c = getCardState(student, q.id);
+                if (c.state === "leitner" && counts[c.box]) {
+                    counts[c.box].total++;
+                    if (isCardDueToday(student, c)) counts[c.box].due++;
+                } else if (c.state === "mastered") {
+                    counts.mastered++;
+                }
+            });
+            return counts;
+        }
+
+        function renderMiniLeitnerBoxes() {
+            const student = getCurrentStudent();
+            if (!student) return;
+            const counts = getLeitnerCounts(student);
+            const grid = document.getElementById("miniLeitnerBoxesGrid");
+            grid.innerHTML = "";
+
+            const boxConfigs = [
+                { box: 1, title: "خانه ۱", sub: "مرور ۱ روز بعد", color: "border-rose-500/40 bg-rose-950/30 text-rose-300" },
+                { box: 2, title: "خانه ۲", sub: "مرور ۲ روز بعد", color: "border-amber-500/40 bg-amber-950/30 text-amber-300" },
+                { box: 3, title: "خانه ۳", sub: "مرور ۴ روز بعد", color: "border-yellow-500/40 bg-yellow-950/30 text-yellow-300" },
+                { box: 4, title: "خانه ۴", sub: "مرور ۸ روز بعد", color: "border-cyan-500/40 bg-cyan-950/30 text-cyan-300" },
+                { box: 5, title: "خانه ۵", sub: "مرور ۱۵ روز بعد", color: "border-indigo-500/40 bg-indigo-950/30 text-indigo-300" },
+                { box: "mastered", title: "تثبیت‌شده 🏆", sub: "یادگیری کامل", color: "border-emerald-500/40 bg-emerald-950/30 text-emerald-300" }
+            ];
+
+            boxConfigs.forEach(cfg => {
+                const div = document.createElement("button");
+                div.type = "button";
+                div.className = `leitner-slot p-2.5 rounded-2xl border text-center flex flex-col items-center justify-center relative ${cfg.color}`;
+                const total = cfg.box === "mastered" ? counts.mastered : counts[cfg.box].total;
+                const due = cfg.box === "mastered" ? 0 : counts[cfg.box].due;
+
+                div.innerHTML = `
+                    ${due > 0 ? `<span class="absolute -top-2 -left-2 px-1.5 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-black shadow animate-bounce">${due} موعد</span>` : ""}
+                    <span class="text-xs font-extrabold">${cfg.title}</span>
+                    <span class="text-lg font-black text-white my-0.5">${total}</span>
+                    <span class="text-[10px] opacity-80">${cfg.sub}</span>
+                `;
+                div.addEventListener("click", () => {
+                    sfx.playClick();
+                    switchMainTab("leitner");
+                    selectedLeitnerListFilter = cfg.box;
+                    renderDetailedLeitnerView();
+                });
+                grid.appendChild(div);
+            });
+        }
+
+        function renderDetailedLeitnerView() {
+            const student = getCurrentStudent();
+            if (!student) return;
+            const today = getStudentCurrentDay(student);
+            const counts = getLeitnerCounts(student);
+            const grid = document.getElementById("detailedLeitnerBoxesGrid");
+            grid.innerHTML = "";
+
+            const boxConfigs = [
+                { box: 1, title: "خانه ۱ لایتنر", interval: "۱ روز بعد", icon: "1️⃣" },
+                { box: 2, title: "خانه ۲ لایتنر", interval: "۲ روز بعد", icon: "2️⃣" },
+                { box: 3, title: "خانه ۳ لایتنر", interval: "۴ روز بعد", icon: "3️⃣" },
+                { box: 4, title: "خانه ۴ لایتنر", interval: "۸ روز بعد", icon: "4️⃣" },
+                { box: 5, title: "خانه ۵ لایتنر", interval: "۱۵ روز بعد", icon: "5️⃣" },
+                { box: "mastered", title: "تثبیت‌شده", interval: "حافظه بلندمدت", icon: "🏆" }
+            ];
+
+            boxConfigs.forEach(cfg => {
+                const total = cfg.box === "mastered" ? counts.mastered : counts[cfg.box].total;
+                const due = cfg.box === "mastered" ? 0 : counts[cfg.box].due;
+                const isSelected = String(selectedLeitnerListFilter) === String(cfg.box);
+
+                const card = document.createElement("button");
+                card.type = "button";
+                card.className = `leitner-slot p-3.5 rounded-2xl bg-slate-900/80 border text-right flex flex-col justify-between ${
+                    isSelected ? "active-slot border-cyan-400" : "border-slate-700"
+                }`;
+                card.innerHTML = `
+                    <div class="flex items-center justify-between w-full mb-2">
+                        <span class="text-lg">${cfg.icon}</span>
+                        ${due > 0 ? `<span class="px-2 py-0.5 rounded-full bg-rose-500/30 border border-rose-400 text-rose-200 text-[10px] font-black">${due} موعد امروز</span>` : ""}
+                    </div>
+                    <div>
+                        <div class="font-black text-xs sm:text-sm text-white">${cfg.title}</div>
+                        <div class="text-[11px] text-slate-400">فاصله مرور: ${cfg.interval}</div>
+                    </div>
+                    <div class="mt-2 pt-2 border-t border-slate-800 flex items-center justify-between w-full text-xs">
+                        <span class="text-slate-400">تعداد کارت:</span>
+                        <span class="font-black text-cyan-300 text-sm">${total}</span>
+                    </div>
+                `;
+                card.addEventListener("click", () => {
+                    sfx.playClick();
+                    selectedLeitnerListFilter = cfg.box;
+                    renderDetailedLeitnerView();
+                });
+                grid.appendChild(card);
+            });
+
+            // Render scheduled questions list below
+            const listEl = document.getElementById("leitnerScheduledItemsList");
+            listEl.innerHTML = "";
+            const allQuestions = getAllQuestions();
+
+            const matchingQuestions = allQuestions.filter(q => {
+                const c = getCardState(student, q.id);
+                if (selectedLeitnerListFilter === "all") return c.state === "leitner";
+                if (selectedLeitnerListFilter === "due") return c.state === "leitner" && isCardDueToday(student, c);
+                if (selectedLeitnerListFilter === "mastered") return c.state === "mastered";
+                return c.state === "leitner" && String(c.box) === String(selectedLeitnerListFilter);
+            });
+
+            if (matchingQuestions.length === 0) {
+                listEl.innerHTML = `
+                    <div class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 text-center text-xs sm:text-sm text-slate-400">
+                        هیچ سوالی در این بخش از جعبه لایتنر وجود ندارد.
+                    </div>
+                `;
+                return;
+            }
+
+            matchingQuestions.forEach(q => {
+                const c = getCardState(student, q.id);
+                const isDue = isCardDueToday(student, c);
+                const daysLeft = Math.max(0, c.nextReviewDay - today);
+
+                const item = document.createElement("div");
+                item.className = "p-3.5 rounded-2xl bg-slate-900/85 border border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3";
+
+                let scheduleInfo = "";
+                if (c.state === "mastered") {
+                    scheduleInfo = `<span class="px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 text-xs font-bold">تثبیت‌شده ✅</span>`;
+                } else if (isDue) {
+                    scheduleInfo = `<span class="px-2.5 py-1 rounded-xl bg-rose-500/25 border border-rose-400/40 text-rose-200 text-xs font-black">⏰ موعد پرسش امروز رسیده است!</span>`;
+                } else {
+                    scheduleInfo = `<span class="px-2.5 py-1 rounded-xl bg-amber-500/20 border border-amber-400/30 text-amber-200 text-xs font-bold">📅 برنامه‌ریزی شده برای ${daysLeft} روز دیگر (روز ${c.nextReviewDay})</span>`;
+                }
+
+                item.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-[11px] px-2 py-0.5 rounded-md bg-slate-800 text-cyan-300 font-bold">درس ${q.lesson}</span>
+                            <span class="text-[11px] px-2 py-0.5 rounded-md bg-slate-800 text-indigo-300 font-bold">${q.type === "mcq" ? "تستی" : "تشریحی"}</span>
+                            ${c.state === "leitner" ? `<span class="text-[11px] px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 font-bold">خانه ${c.box} لایتنر</span>` : ""}
+                        </div>
+                        <p class="text-xs sm:text-sm font-bold text-white">${q.question}</p>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        ${scheduleInfo}
+                        <button class="practice-single-btn px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/35 text-cyan-200 border border-cyan-400/30 text-xs font-bold transition">
+                            پرسش الان
+                        </button>
+                    </div>
+                `;
+
+                item.querySelector(".practice-single-btn").addEventListener("click", () => {
+                    sfx.playClick();
+                    activeQueue = [q];
+                    currentQueueIndex = 0;
+                    switchMainTab("play");
+                    renderCurrentQuestion();
+                });
+
+                listEl.appendChild(item);
+            });
+        }
+
+        function renderLeaderboards() {
+            const desktopList = document.getElementById("desktopLeaderboardList");
+            const mobileList = document.getElementById("mobileLeaderboardList");
+            if (!desktopList || !mobileList) return;
+
+            const studentsArr = Object.values(appData.students).sort((a, b) => b.score - a.score);
+
+            const buildHTML = () => {
+                if (studentsArr.length === 0) {
+                    return `<div class="text-xs text-slate-400 text-center py-4">هنوز دانش‌آموزی ثبت نشده است.</div>`;
+                }
+                return studentsArr.map((st, idx) => {
+                    const isCurrent = st.id === appData.currentStudentId;
+                    let rankBadge = `<span class="w-7 h-7 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center font-black text-xs">${idx + 1}</span>`;
+                    if (idx === 0) rankBadge = `<span class="w-7 h-7 rounded-lg bg-amber-500/25 border border-amber-400 text-amber-300 flex items-center justify-center text-base">🥇</span>`;
+                    else if (idx === 1) rankBadge = `<span class="w-7 h-7 rounded-lg bg-slate-300/20 border border-slate-300 text-slate-200 flex items-center justify-center text-base">🥈</span>`;
+                    else if (idx === 2) rankBadge = `<span class="w-7 h-7 rounded-lg bg-amber-700/30 border border-amber-600 text-amber-400 flex items-center justify-center text-base">🥉</span>`;
+
+                    const counts = getLeitnerCounts(st);
+                    const inLeitner = counts[1].total + counts[2].total + counts[3].total + counts[4].total + counts[5].total;
+
+                    return `
+                        <div class="p-3 rounded-2xl border transition flex items-center justify-between gap-2 ${
+                            isCurrent
+                                ? "bg-emerald-950/50 border-emerald-400/60 shadow-md"
+                                : "bg-slate-900/75 border-slate-800 hover:border-slate-700"
+                        }">
+                            <div class="flex items-center gap-2.5 overflow-hidden">
+                                ${rankBadge}
+                                <span class="text-xl shrink-0">${st.avatar || "🧑‍🔬"}</span>
+                                <div class="truncate">
+                                    <div class="text-xs sm:text-sm font-black text-white flex items-center gap-1.5 truncate">
+                                        <span class="truncate">${st.name}</span>
+                                        ${isCurrent ? `<span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500 text-slate-950 font-black">شما</span>` : ""}
+                                    </div>
+                                    <div class="text-[10px] text-slate-400">
+                                        تثبیت‌شده: ${counts.mastered} | در لایتنر: ${inLeitner}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="px-2.5 py-1 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-300 font-black text-xs shrink-0">
+                                ${st.score} امتیاز
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+            };
+
+            const html = buildHTML();
+            desktopList.innerHTML = html;
+            mobileList.innerHTML = html;
+        }
+
+        function refreshAllUI() {
+            updateHeaderAndStatsUI();
+            renderCurrentQuestion();
+            renderMiniLeitnerBoxes();
+            renderDetailedLeitnerView();
+            renderLeaderboards();
+        }
+
+        /**************************************************************
+         * 11. TAB NAVIGATION & EVENT LISTENERS
+         **************************************************************/
+        function switchMainTab(tabName) {
+            document.querySelectorAll(".main-tab-btn").forEach(btn => {
+                if (btn.dataset.tab === tabName) {
+                    btn.className = "main-tab-btn flex-1 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 bg-emerald-500 text-slate-950 shadow";
+                } else {
+                    btn.className = "main-tab-btn flex-1 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 text-slate-300 hover:bg-slate-800/70";
+                }
+            });
+
+            ["play", "leitner", "lessons", "leaderboard"].forEach(t => {
+                const el = document.getElementById(`tabContent-${t}`);
+                if (el) {
+                    if (t === tabName) el.classList.remove("hidden");
+                    else el.classList.add("hidden");
+                }
+            });
+        }
+
+        function simulateNextDay() {
+            const student = getCurrentStudent();
+            if (!student) return;
+            sfx.playClick();
+            student.virtualDayOffset = (student.virtualDayOffset || 0) + 1;
+            saveAppData();
+
+            const today = getStudentCurrentDay(student);
+            // Automatically switch to 'smart' mode so due Leitner cards appear at the top of the queue
+            document.getElementById("modeFilterSelect").value = "smart";
+            buildQuestionQueue(true);
+            refreshAllUI();
+
+            const dueCount = document.getElementById("statDueTodayCount").textContent;
+            showToast(`زمان به «روز ${today} آموزش» جلو رفت! اکنون ${dueCount} سوال در جعبه لایتنر موعد پرسش امروز است.`, "warning");
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            loadAppData();
+
+            // Avatar selection on login screen
+            document.querySelectorAll(".avatar-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    sfx.playClick();
+                    appData.selectedAvatar = btn.dataset.avatar;
+                    document.querySelectorAll(".avatar-btn").forEach(b => {
+                        b.className = "avatar-btn p-2.5 rounded-xl bg-slate-800/80 border-2 border-transparent text-2xl flex items-center justify-center transition hover:scale-105";
+                    });
+                    btn.className = "avatar-btn p-2.5 rounded-xl bg-emerald-500/30 border-2 border-emerald-400 text-2xl flex items-center justify-center transition hover:scale-105";
+                });
+            });
+
+            // Login form submission
+            document.getElementById("loginForm").addEventListener("submit", e => {
+                e.preventDefault();
+                sfx.playClick();
+                const nameInput = document.getElementById("studentNameInput");
+                loginOrCreateStudent(nameInput.value, appData.selectedAvatar);
+            });
+
+            // Switch User / Add Student buttons
+            document.getElementById("switchUserBtn").addEventListener("click", () => {
+                sfx.playClick();
+                returnToLoginView();
+            });
+            document.getElementById("addStudentQuickBtn").addEventListener("click", () => {
+                sfx.playClick();
+                returnToLoginView();
+            });
+
+            // Sound toggle
+            document.getElementById("soundToggleBtn").addEventListener("click", () => {
+                sfx.enabled = !sfx.enabled;
+                const icon = document.getElementById("soundIcon");
+                icon.className = sfx.enabled ? "fa-solid fa-volume-high" : "fa-solid fa-volume-xmark text-slate-400";
+                showToast(sfx.enabled ? "صدای بازی فعال شد 🔊" : "صدای بازی قطع شد 🔇", "info");
+            });
+
+            // Time Simulation (+1 Day) buttons
+            document.getElementById("advanceDayBtn").addEventListener("click", simulateNextDay);
+            document.getElementById("emptyAdvanceDayBtn").addEventListener("click", simulateNextDay);
+
+            // Empty Queue -> Practice All button
+            document.getElementById("emptySwitchToPracticeAllBtn").addEventListener("click", () => {
+                sfx.playClick();
+                document.getElementById("modeFilterSelect").value = "all_practice";
+                buildQuestionQueue(true);
+                refreshAllUI();
+            });
+
+            // Main Tabs
+            document.querySelectorAll(".main-tab-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    sfx.playClick();
+                    switchMainTab(btn.dataset.tab);
+                });
+            });
+
+            // Filters (Mode, Lesson, Type)
+            ["modeFilterSelect", "lessonFilterSelect", "typeFilterSelect"].forEach(id => {
+                document.getElementById(id).addEventListener("change", () => {
+                    sfx.playClick();
+                    buildQuestionQueue(true);
+                    renderCurrentQuestion();
+                });
+            });
+
+            // Descriptive Question: Reveal Answer button
+            document.getElementById("revealDescriptiveAnswerBtn").addEventListener("click", () => {
+                sfx.playClick();
+                document.getElementById("descriptiveThinkBox").classList.add("hidden");
+                document.getElementById("descriptiveAnswerBox").classList.remove("hidden");
+            });
+
+            // Descriptive Question: "یادم هست" & "یادم نیست" buttons
+            document.getElementById("btnRememberedYes").addEventListener("click", () => {
+                const q = activeQueue[currentQueueIndex];
+                if (!q || currentQuestionAnswered) return;
+                document.getElementById("descriptiveActionButtons").classList.add("hidden");
+                processStudentAnswer(q, true);
+            });
+
+            document.getElementById("btnRememberedNo").addEventListener("click", () => {
+                const q = activeQueue[currentQueueIndex];
+                if (!q || currentQuestionAnswered) return;
+                document.getElementById("descriptiveActionButtons").classList.add("hidden");
+                processStudentAnswer(q, false);
+            });
+
+            // Next / Prev Question Navigation
+            document.getElementById("nextQuestionBtn").addEventListener("click", () => {
+                sfx.playClick();
+                if (activeQueue.length === 0) return;
+                // Rebuild queue if we are in smart/due mode so answered cards smoothly cycle
+                const mode = document.getElementById("modeFilterSelect").value;
+                if (currentQuestionAnswered && (mode === "smart" || mode === "leitner_due" || mode === "new_only")) {
+                    buildQuestionQueue(false);
+                    if (currentQueueIndex >= activeQueue.length) currentQueueIndex = 0;
+                } else {
+                    currentQueueIndex = (currentQueueIndex + 1) % activeQueue.length;
+                }
+                renderCurrentQuestion();
+            });
+
+            document.getElementById("prevQuestionBtn").addEventListener("click", () => {
+                sfx.playClick();
+                if (activeQueue.length === 0) return;
+                currentQueueIndex = (currentQueueIndex - 1 + activeQueue.length) % activeQueue.length;
+                renderCurrentQuestion();
+            });
+
+            // Leitner Tab Sub-filters
+            document.querySelectorAll(".leitner-list-filter-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    sfx.playClick();
+                    selectedLeitnerListFilter = btn.dataset.boxfilter;
+                    renderDetailedLeitnerView();
+                });
+            });
+
+            document.getElementById("leitnerTabReviewDueBtn").addEventListener("click", () => {
+                sfx.playClick();
+                document.getElementById("modeFilterSelect").value = "leitner_due";
+                buildQuestionQueue(true);
+                switchMainTab("play");
+                renderCurrentQuestion();
+            });
+
+            // Add Custom Question Modal
+            const addQModal = document.getElementById("addQuestionModal");
+            document.getElementById("openAddQuestionModalBtn").addEventListener("click", () => {
+                sfx.playClick();
+                addQModal.classList.remove("hidden");
+                addQModal.classList.add("flex");
+            });
+            document.getElementById("closeAddQuestionModalBtn").addEventListener("click", () => {
+                addQModal.classList.add("hidden");
+                addQModal.classList.remove("flex");
+            });
+            document.getElementById("newQType").addEventListener("change", e => {
+                const mcqFields = document.getElementById("newQMcqFields");
+                if (e.target.value === "mcq") mcqFields.classList.remove("hidden");
+                else mcqFields.classList.add("hidden");
+            });
+
+            document.getElementById("addQuestionForm").addEventListener("submit", e => {
+                e.preventDefault();
+                const lesson = parseInt(document.getElementById("newQLesson").value, 10);
+                const type = document.getElementById("newQType").value;
+                const questionText = document.getElementById("newQText").value.trim();
+                const explanation = document.getElementById("newQExplanation").value.trim();
+
+                if (!questionText || !explanation) return;
+
+                const newQ = {
+                    id: "custom_" + Date.now(),
+                    lesson,
+                    type,
+                    question: questionText,
+                    explanation
+                };
+
+                if (type === "mcq") {
+                    const opts = [
+                        document.getElementById("newQOpt0").value.trim() || "گزینه ۱",
+                        document.getElementById("newQOpt1").value.trim() || "گزینه ۲",
+                        document.getElementById("newQOpt2").value.trim() || "گزینه ۳",
+                        document.getElementById("newQOpt3").value.trim() || "گزینه ۴"
+                    ];
+                    const correctRadio = document.querySelector('input[name="newQCorrectIdx"]:checked');
+                    newQ.options = opts;
+                    newQ.correctIndex = correctRadio ? parseInt(correctRadio.value, 10) : 0;
+                } else {
+                    newQ.answer = explanation;
+                }
+
+                appData.customQuestions.push(newQ);
+                saveAppData();
+
+                addQModal.classList.add("hidden");
+                addQModal.classList.remove("flex");
+                e.target.reset();
+
+                buildQuestionQueue(false);
+                refreshAllUI();
+                showToast("سوال جدید با موفقیت به بانک سوالات اضافه شد!", "success");
+            });
+
+            // Export JSON Backup
+            document.getElementById("exportDataBtn").addEventListener("click", () => {
+                sfx.playClick();
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+                const dlAnchor = document.createElement("a");
+                dlAnchor.setAttribute("href", dataStr);
+                dlAnchor.setAttribute("download", "science6_leitner_backup.json");
+                document.body.appendChild(dlAnchor);
+                dlAnchor.click();
+                dlAnchor.remove();
+                showToast("فایل پشتیبان پیشرفت‌ها دانلود شد.", "success");
+            });
+
+            // Reset Current Student Progress
+            document.getElementById("resetCurrentStudentBtn").addEventListener("click", () => {
+                const st = getCurrentStudent();
+                if (!st) return;
+                showCustomConfirm(
+                    "شروع مجدد پیشرفت دانش‌آموز",
+                    `آیا مطمئن هستید که می‌خواهید امتیاز و جعبه لایتنر «${st.name}» را صفر کنید و از ابتدا شروع نمایید؟`,
+                    () => {
+                        st.score = 0;
+                        st.virtualDayOffset = 0;
+                        st.cards = {};
+                        saveAppData();
+                        buildQuestionQueue(true);
+                        refreshAllUI();
+                        showToast("پیشرفت شما از نو تنظیم شد.", "info");
+                    }
+                );
+            });
+
+            // Auto-resume if a student was logged in previously, or show login screen with saved students
+            if (appData.currentStudentId && appData.students[appData.currentStudentId]) {
+                enterAppView();
+            } else {
+                renderLoginScreen();
+            }
+        });
+    </script>
+</body>
+</html>

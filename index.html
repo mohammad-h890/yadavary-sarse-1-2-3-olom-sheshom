@@ -1,0 +1,1960 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لایتنر هوشمند علوم ششم (۱۵۰ سوال درس ۱، ۲ و ۳)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --primary-light: #e0e7ff;
+            --secondary: #0ea5e9;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --bg-gradient: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a8a 100%);
+            --card-bg: rgba(255, 255, 255, 0.96);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius-xl: 20px;
+            --radius-lg: 14px;
+            --radius-md: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseScore {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.22); color: #fbbf24; }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .animate-fade {
+            animation: fadeIn 0.35s ease-out forwards;
+        }
+
+        .pulse-score {
+            animation: pulseScore 0.5s ease-in-out;
+        }
+
+        /* Login Screen */
+        #login-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            border-radius: var(--radius-xl);
+            padding: 36px 32px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+
+        .login-logo {
+            width: 84px;
+            height: 84px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            margin: 0 auto 18px;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 8px 16px rgba(79, 70, 229, 0.2);
+        }
+
+        .login-title {
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: #1e1b4b;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 26px;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            font-size: 1.05rem;
+            transition: all 0.2s;
+            outline: none;
+            background: #f8fafc;
+        }
+
+        .text-input:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 24px;
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            width: 100%;
+            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.45);
+        }
+
+        .saved-users-section {
+            margin-top: 26px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--border-color);
+            text-align: right;
+        }
+
+        .saved-users-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .user-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .user-chip {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .user-chip:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        .user-chip-score {
+            background: var(--accent);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        /* Top Header */
+        .app-header {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 14px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            color: white;
+        }
+
+        .header-container {
+            max-width: 1180px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #38bdf8, #6366f1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(56, 189, 248, 0.3);
+        }
+
+        .brand-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+
+        .brand-sub {
+            font-size: 0.78rem;
+            color: #cbd5e1;
+        }
+
+        .student-profile-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .student-badge {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            padding: 6px 8px 6px 14px;
+            border-radius: 999px;
+            gap: 12px;
+        }
+
+        .student-name-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-right: 6px;
+        }
+
+        .student-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.95rem;
+        }
+
+        #header-student-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #f8fafc;
+        }
+
+        .student-score-pill {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #fff;
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+        }
+
+        .system-clock-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 7px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            font-size: 0.85rem;
+        }
+
+        .clock-live-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .btn-sm {
+            padding: 6px 11px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-logout {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.35);
+        }
+
+        .btn-logout:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1180px;
+            width: 100%;
+            margin: 24px auto;
+            padding: 0 20px 40px;
+            flex: 1;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            background: rgba(255, 255, 255, 0.12);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 12px 22px;
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .nav-tab.active {
+            background: #ffffff;
+            color: var(--primary-dark);
+            border-color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+        }
+
+        .badge-count {
+            background: var(--danger);
+            color: white;
+            font-size: 0.78rem;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-weight: 800;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 24px;
+        }
+
+        @media (max-width: 960px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Leitner Visual Overview */
+        .leitner-panel {
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 24px;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .panel-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #1e1b4b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .leitner-boxes {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .leitner-boxes {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .leitner-boxes {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .l-box {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius-lg);
+            padding: 12px 10px;
+            text-align: center;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .l-box.has-due {
+            border-color: var(--danger);
+            background: #fff5f5;
+        }
+
+        .l-box.mastered {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .l-box-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .l-box-interval {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .l-box-count {
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .l-box-due-tag {
+            display: inline-block;
+            margin-top: 4px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Filter Controls */
+        .filter-bar {
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            padding: 18px 24px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .select-input {
+            padding: 9px 14px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--border-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: #f8fafc;
+            color: var(--text-main);
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Question Card Area */
+        .question-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            min-height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .q-meta-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .q-badges {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .q-badge {
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .badge-lesson { background: var(--primary-light); color: var(--primary-dark); }
+        .badge-mcq { background: #fef3c7; color: #b45309; }
+        .badge-desc { background: #e0f2fe; color: #0369a1; }
+        .badge-leitner { background: #f3e8ff; color: #6b21a8; }
+
+        .q-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.85;
+            color: #0f172a;
+            margin-bottom: 26px;
+        }
+
+        /* Multiple Choice Options */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: var(--radius-lg);
+            padding: 15px 18px;
+            text-align: right;
+            font-size: 1.02rem;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateX(-4px);
+        }
+
+        .option-num {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: #e2e8f0;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .option-btn.correct {
+            background: var(--success-light);
+            border-color: var(--success);
+            color: #065f46;
+        }
+
+        .option-btn.correct .option-num {
+            background: var(--success);
+            color: white;
+        }
+
+        .option-btn.wrong {
+            background: var(--danger-light);
+            border-color: var(--danger);
+            color: #991b1b;
+        }
+
+        .option-btn.wrong .option-num {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Descriptive Flashcard Area */
+        .descriptive-area {
+            margin-bottom: 22px;
+        }
+
+        .answer-reveal-box {
+            background: #f0f9ff;
+            border: 2px dashed #38bdf8;
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-top: 16px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .answer-reveal-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #0369a1;
+            margin-bottom: 8px;
+        }
+
+        .answer-reveal-text {
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: #0c4a6e;
+            line-height: 1.75;
+        }
+
+        .self-eval-buttons {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .btn-remember {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-remember:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-forget {
+            background: var(--danger);
+            color: white;
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-forget:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        /* Feedback Box */
+        .feedback-banner {
+            padding: 16px 20px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 20px;
+            font-weight: 700;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .feedback-banner.success {
+            background: var(--success-light);
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .feedback-banner.error {
+            background: var(--danger-light);
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        /* Side Panel Stats */
+        .side-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 24px;
+        }
+
+        .stat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: #f8fafc;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .stat-val {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .progress-bar-wrap {
+            margin-top: 18px;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        .table-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            box-shadow: var(--shadow-lg);
+            overflow-x: auto;
+        }
+
+        table.styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+        }
+
+        table.styled-table th {
+            background: #f1f5f9;
+            color: #334155;
+            padding: 14px 16px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        table.styled-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        table.styled-table tr.current-user-row {
+            background: #fef9c3;
+        }
+
+        .rank-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            background: #e2e8f0;
+        }
+
+        .rank-1 { background: #fbbf24; color: #fff; }
+        .rank-2 { background: #94a3b8; color: #fff; }
+        .rank-3 { background: #d97706; color: #fff; }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-icon {
+            font-size: 54px;
+            margin-bottom: 14px;
+        }
+
+        .empty-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #1e1b4b;
+        }
+
+        .empty-desc {
+            color: var(--text-muted);
+            margin-bottom: 22px;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen">
+        <div class="login-card animate-fade">
+            <div class="login-logo">🔬</div>
+            <h1 class="login-title">علوم ششم دبستان</h1>
+            <p class="login-subtitle">بانک جامع ۱۵۰ سوال استاندارد و جعبه لایتنر هوشمند<br>درس ۱ (زنگ علوم)، درس ۲ (سرگذشت دفتر من) و درس ۳ (کارخانه کاغذسازی)</p>
+            
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label for="student-name-input">نام و نام خانوادگی دانش‌آموز:</label>
+                    <input type="text" id="student-name-input" class="text-input" placeholder="مثال: علی رضایی" required autocomplete="off">
+                </div>
+                <button type="submit" class="btn btn-primary">ورود و شروع مرور لایتنر 🚀</button>
+            </form>
+
+            <div id="saved-users-container" class="saved-users-section" style="display: none;">
+                <div class="saved-users-title">ورود سریع دانش‌آموزان قبلی:</div>
+                <div id="saved-users-list" class="user-chips"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand-box">
+                <div class="brand-icon">🧪</div>
+                <div>
+                    <div class="brand-title">لایتنر هوشمند علوم ششم دبستان</div>
+                    <div class="brand-sub">۱۵۰ سوال استاندارد (۱۱۰ تستی + ۴۰ تشریحی) منطبق با کتاب درسی</div>
+                </div>
+            </div>
+
+            <div class="student-profile-bar">
+                <div class="student-badge" title="پروفایل دانش‌آموز">
+                    <div class="student-name-wrap">
+                        <div class="student-avatar" id="header-avatar">د</div>
+                        <span id="header-student-name">دانش‌آموز</span>
+                    </div>
+                    <div class="student-score-pill" id="header-score-pill">
+                        <span>⭐</span>
+                        <span id="header-student-score">0</span>
+                        <span>امتیاز</span>
+                    </div>
+                </div>
+
+                <div class="system-clock-box">
+                    <span class="clock-live-dot"></span>
+                    <span>📅 <strong id="current-date-display"></strong></span>
+                    <span style="opacity: 0.5;">|</span>
+                    <span>🕒 <strong id="current-time-display"></strong></span>
+                </div>
+
+                <button class="btn-sm btn-logout" onclick="logoutStudent()">تغییر کاربر</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN BODY -->
+    <main class="main-container">
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" id="tab-btn-play" onclick="switchView('play')">
+                <span>🎮 میز پرسش و مرور</span>
+                <span class="badge-count" id="due-tab-badge" style="display:none;">0</span>
+            </button>
+            <button class="nav-tab" id="tab-btn-leitner" onclick="switchView('leitner')">
+                <span>🗂️ زمان‌بندی و جدول لایتنر</span>
+            </button>
+            <button class="nav-tab" id="tab-btn-leaderboard" onclick="switchView('leaderboard')">
+                <span>🏆 رتبه‌بندی دانش‌آموزان</span>
+            </button>
+        </div>
+
+        <!-- VIEW 1: PLAY -->
+        <section id="view-play" class="view-section active">
+            <!-- Leitner Overview -->
+            <div class="leitner-panel">
+                <div class="panel-header">
+                    <div class="panel-title">📦 جعبه لایتنر هوشمند شما (همگام با تقویم دستگاه)</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">
+                        پاسخ درست ⬅ ارتقا به خانه بعد | پاسخ غلط ⬅ خانه ۱ (مرور فردا)
+                    </div>
+                </div>
+                <div class="leitner-boxes">
+                    <div class="l-box" id="box-stat-0">
+                        <div class="l-box-title">بانک سوالات جدید</div>
+                        <div class="l-box-interval">هنوز خوانده نشده</div>
+                        <div class="l-box-count" id="count-box-0">0</div>
+                    </div>
+                    <div class="l-box" id="box-stat-1">
+                        <div class="l-box-title">خانه ۱ لایتنر</div>
+                        <div class="l-box-interval">مرور: ۱ روز بعد</div>
+                        <div class="l-box-count" id="count-box-1">0</div>
+                        <div id="due-box-1"></div>
+                    </div>
+                    <div class="l-box" id="box-stat-2">
+                        <div class="l-box-title">خانه ۲ لایتنر</div>
+                        <div class="l-box-interval">مرور: ۲ روز بعد</div>
+                        <div class="l-box-count" id="count-box-2">0</div>
+                        <div id="due-box-2"></div>
+                    </div>
+                    <div class="l-box" id="box-stat-3">
+                        <div class="l-box-title">خانه ۳ لایتنر</div>
+                        <div class="l-box-interval">مرور: ۴ روز بعد</div>
+                        <div class="l-box-count" id="count-box-3">0</div>
+                        <div id="due-box-3"></div>
+                    </div>
+                    <div class="l-box" id="box-stat-4">
+                        <div class="l-box-title">خانه ۴ لایتنر</div>
+                        <div class="l-box-interval">مرور: ۸ روز بعد</div>
+                        <div class="l-box-count" id="count-box-4">0</div>
+                        <div id="due-box-4"></div>
+                    </div>
+                    <div class="l-box mastered" id="box-stat-5">
+                        <div class="l-box-title">تثبیت‌شده ✅</div>
+                        <div class="l-box-interval">حافظه بلندمدت</div>
+                        <div class="l-box-count" id="count-box-5" style="color: var(--success);">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label for="filter-mode" style="font-weight: 700; font-size: 0.9rem;">حالت مرور:</label>
+                    <select id="filter-mode" class="select-input" onchange="loadNextQuestion()">
+                        <option value="smart">هوشمند (اولویت با سوالات امروز لایتنر + بعد سوالات جدید)</option>
+                        <option value="due_only">فقط سوالات نوبت مرور امروز در لایتنر</option>
+                        <option value="new_only">فقط سوالات جدید بررسی‌نشده</option>
+                    </select>
+
+                    <label for="filter-lesson" style="font-weight: 700; font-size: 0.9rem;">انتخاب درس:</label>
+                    <select id="filter-lesson" class="select-input" onchange="loadNextQuestion()">
+                        <option value="all">همه درس‌ها (۱، ۲ و ۳)</option>
+                        <option value="درس 1 - زنگ علوم">درس ۱ - زنگ علوم (۴۰ سوال)</option>
+                        <option value="درس 2 - سرگذشت دفتر من">درس ۲ - سرگذشت دفتر من (۵۵ سوال)</option>
+                        <option value="درس 3 - کارخانه کاغذسازی">درس ۳ - کارخانه کاغذسازی (۵۵ سوال)</option>
+                    </select>
+
+                    <label for="filter-type" style="font-weight: 700; font-size: 0.9rem;">نوع سوال:</label>
+                    <select id="filter-type" class="select-input" onchange="loadNextQuestion()">
+                        <option value="all">تستی و تشریحی با هم</option>
+                        <option value="mcq">فقط سوالات تستی (+۱۰ امتیاز)</option>
+                        <option value="descriptive">فقط سوالات تشریحی (مرور مفهومی)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Question Card -->
+                <div id="question-stage" class="question-card"></div>
+
+                <!-- Sidebar -->
+                <div>
+                    <div class="side-card">
+                        <div class="panel-title" style="margin-bottom: 16px;">📊 کارنامه لحظه‌ای شما</div>
+                        <div class="stat-list">
+                            <div class="stat-item">
+                                <span class="stat-label">امتیاز کل تستی:</span>
+                                <span class="stat-val" id="stat-total-score" style="color: var(--accent);">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">موعد مرور امروز:</span>
+                                <span class="stat-val" id="stat-due-today" style="color: var(--danger);">0 سوال</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">در حال یادگیری در جعبه:</span>
+                                <span class="stat-val" id="stat-in-leitner" style="color: var(--primary);">0 سوال</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">پاسخ‌های صحیح تستی:</span>
+                                <span class="stat-val" id="stat-correct-mcq" style="color: var(--success);">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">تثبیت‌شده در ذهن:</span>
+                                <span class="stat-val" id="stat-mastered">0 از 150</span>
+                            </div>
+                        </div>
+
+                        <div class="progress-bar-wrap">
+                            <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:700;">
+                                <span>درصد تسلط کل بانک سوالات:</span>
+                                <span id="progress-percent">0%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill" id="progress-bar-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="side-card" style="background: linear-gradient(135deg, #eef2ff, #e0e7ff); border: 1px solid #c7d2fe;">
+                        <div style="font-weight: 800; color: #312e81; margin-bottom: 8px; font-size: 0.95rem;">💡 راهنمای مطالعه:</div>
+                        <ul style="padding-right: 18px; font-size: 0.85rem; color: #3730a3; line-height: 1.8;">
+                            <li>هر پاسخ صحیح به <strong>سوال تستی</strong> <strong>۱۰ امتیاز</strong> دارد.</li>
+                            <li>سوالات تشریحی به عنوان <strong>فلش‌کارت</strong> مرور می‌شوند و پاسخ کامل کتاب را نشان می‌دهند.</li>
+                            <li>اگر سوالی را اشتباه بزنید، به <strong>خانه ۱</strong> می‌رود تا دقیقاً فردا دوباره از شما پرسیده شود.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: LEITNER TABLE -->
+        <section id="view-leitner" class="view-section">
+            <div class="table-card">
+                <div class="panel-header">
+                    <div class="panel-title">🗓️ جدول زمان‌بندی مرور سوالات در جعبه لایتنر</div>
+                    <div>
+                        <select id="leitner-table-filter" class="select-input" onchange="renderLeitnerTable()">
+                            <option value="in_box">فقط سوالات در حال یادگیری (خانه‌های ۱ تا ۴)</option>
+                            <option value="due">فقط سوالات امروز</option>
+                            <option value="mastered">سوالات کاملاً تثبیت‌شده</option>
+                            <option value="all">تمام ۱۵۰ سوال بانک</option>
+                        </select>
+                    </div>
+                </div>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>شماره</th>
+                            <th>درس</th>
+                            <th>نوع</th>
+                            <th>متن سوال</th>
+                            <th>وضعیت در جعبه</th>
+                            <th>زمان پرسش بعدی</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leitner-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- VIEW 3: LEADERBOARD -->
+        <section id="view-leaderboard" class="view-section">
+            <div class="table-card">
+                <div class="panel-header">
+                    <div class="panel-title">🏆 جدول رتبه‌بندی دانش‌آموزان</div>
+                </div>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>رتبه</th>
+                            <th>نام دانش‌آموز</th>
+                            <th>امتیاز</th>
+                            <th>پاسخ صحیح تستی</th>
+                            <th>در حال یادگیری</th>
+                            <th>تثبیت‌شده</th>
+                            <th>آخرین فعالیت</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // بانک جامع ۱۵۰ سوال کاملاً استاندارد و منطبق بر کتاب علوم تجربی ششم ابتدایی
+        const QUESTION_BANK = [
+            // ==================== درس اول: زنگ علوم (سوالات ۱ تا ۴۰) ====================
+            { id: 1, question: "هنگام برخورد شهاب‌سنگ با سطح زمین، چه پدیده‌ای در محل برخورد به وجود می‌آید؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["تپه خاکی", "گودال (دهانه برخورد)", "شکاف بسیار باریک", "دریاچه دائمی"] },
+            { id: 2, question: "در آزمایش رها کردن تیله در ظرف خاک، اگر ارتفاع رها کردن گلوله بیشتر شود، دهانه گودال چه تغییری می‌کند؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 1, options: ["قطر دهانه گودال بزرگ‌تر می‌شود.", "قطر دهانه گودال کوچک‌تر می‌شود.", "اندازه گودال هیچ تغییری نمی‌کند.", "ابتدا بزرگ و سپس ناپدید می‌شود."] },
+            { id: 3, question: "در کاوشگری بررسی اثر ارتفاع بر اندازه دهانه گودال، کدام عامل را تغییر می‌دهیم؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 3, options: ["نوع و جنس خاک", "اندازه و وزن تیله", "فاصله و ارتفاع رها کردن تیله", "روش اندازه‌گیری با خط‌کش"] },
+            { id: 4, question: "در آزمایش بررسی اثر ارتفاع بر گودال، چه مواردی را باید در تمام مراحل «ثابت» نگه داریم؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["ارتفاع رهاسازی و نوع خاک", "نوع خاک و اندازه یا وزن تیله", "اندازه تیله و سرعت برخورد", "قطر گودال و عمق آن"] },
+            { id: 5, question: "در آزمایش بررسی اثر اندازه (سنگینی) تیله بر گودال، کدام عامل تغییر می‌کند؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 1, options: ["اندازه و جرم تیله", "ارتفاع رها کردن تیله", "نوع خاک ظرف", "محل انجام آزمایش"] },
+            { id: 6, question: "اگر دو تیله با اندازه‌های مختلف را از یک ارتفاع مساوی در ظرف خاک رها کنیم، گودال کدام تیله بزرگ‌تر است؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["تیله کوچک‌تر و سبک‌تر", "تیله بزرگ‌تر و سنگین‌تر", "هر دو به یک اندازه گودال می‌سازند.", "هیچ‌کدام گودالی نمی‌سازند."] },
+            { id: 7, question: "چرا در آزمایش‌های علمی، هر آزمایش را معمولاً چند بار تکرار می‌کنند؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["برای اینکه زمان بیشتری صرف شود.", "برای کاهش خطا و اطمینان از درستی نتیجه.", "برای اینکه وسایل آزمایش تغییر کند.", "برای اثبات فرضیه‌های اشتباه."] },
+            { id: 8, question: "اگر یک برگ کاغذ صاف و یک برگ کاغذ مچاله هم‌اندازه و هم‌وزن را همزمان رها کنیم، کدام زودتر می‌رسد؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 1, options: ["کاغذ مچاله زودتر به زمین می‌رسد.", "کاغذ صاف زودتر به زمین می‌رسد.", "هر دو دقیقاً همزمان می‌رسند.", "کاغذ صاف در هوا معلق می‌ماند و هرگز نمی‌رسد."] },
+            { id: 9, question: "علت دیرتر رسیدن کاغذ صاف نسبت به کاغذ مچاله به زمین چیست؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 3, options: ["کاغذ صاف سبک‌تر است.", "کاغذ صاف نیروی جاذبه کمتری دریافت می‌کند.", "هوای بیشتری زیر سطح کاغذ صاف قرار گرفته و مقاومت هوا در برابر آن بیشتر است.", "کاغذ مچاله جاذبه بیشتری دارد."] },
+            { id: 10, question: "اگر دو جسم هم‌شکل با وزن‌های متفاوت را در جایی که هوا وجود ندارد (خلأ) رها کنیم، چه رخ می‌دهد؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["جسم سنگین‌تر زودتر می‌رسد.", "هر دو همزمان به زمین می‌رسند چون مقاومت هوا وجود ندارد.", "جسم سبک‌تر بالاتر می‌ماند.", "هیچ‌کدام سقوط نمی‌کنند."] },
+            { id: 11, question: "اولین گام در انجام یک پژوهش و کاوشگری علمی چیست؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 3, options: ["نتیجه‌گیری نهایی", "انجام آزمایش سریع", "مشاهده دقیق پدیده و طرح پرسش", "نوشتن نظریه علمی"] },
+            { id: 12, question: "به حدس و پیش‌بینی آگاهانه‌ای که بر اساس مشاهده درباره علت یک پدیده ارائه می‌شود، چه می‌گویند؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["نتیجه‌گیری", "فرضیه", "آزمایش", "اندازه‌گیری"] },
+            { id: 13, question: "کدام جمله درباره «فرضیه» صحیح است؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 3, options: ["فرضیه همیشه ۱۰۰٪ درست است و نیاز به آزمایش ندارد.", "فرضیه یک حدس تصادفی بدون فکر است.", "فرضیه پاسخی احتمالی است که باید با آزمایش درستی یا نادرستی آن بررسی شود.", "فرضیه همان نتیجه قطعی آزمایش است."] },
+            { id: 14, question: "اگر گلوله را از ارتفاع ثابت در سه ظرف آب، خاک نرم و گچ رها کنیم، در کدام ظرف اثر برخورد عمیق‌تر دیده می‌شود؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 1, options: ["خاک نرم به دلیل راحتی در جابه‌جایی ذرات نسبت به گچ متراکم", "گچ متراکم چون سخت‌تر است", "در آب گودال دائمی عمیق تشکیل می‌شود", "در هر سه به یک اندازه اثر باقی می‌ماند"] },
+            { id: 15, question: "در آزمایش سقوط تیله در ظرف حاوی آب، بلافاصله پس از برخورد چه مشاهده می‌شود؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["ایجاد گودال همیشگی در آب", "پاشیده شدن قطرات آب و تشکیل امواج دایره‌ای", "تغییر رنگ آب به قهوه‌ای", "شناور ماندن کامل تیله روی آب"] },
+            { id: 16, question: "دانش‌آموزی می‌گوید: «هرچه سرعت برخورد جسم بیشتر باشد، گودال عمیق‌تر است.» این جمله نمونه‌ای از چیست؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 1, options: ["یک فرضیه علمی قابل آزمایش", "یک قانون ثابت اثبات‌شده", "یک مشاهده حسی ساده", "ثبت داده‌های نهایی"] },
+            { id: 17, question: "کدام وسیله برای اندازه‌گیری قطر دهانه گودال در آزمایش علوم مناسب‌تر است؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["ترازو", "خط‌کش یا متر میلی‌متری", "دماسنج", "استوانه مدرج"] },
+            { id: 18, question: "اگر در آزمایشی چندین عامل را همزمان تغییر دهیم، چه مشکلی به وجود می‌آید؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["آزمایش خیلی سریع‌تر انجام می‌شود.", "نمی‌توانیم بفهمیم تغییر در نتیجه، دقیقاً به خاطر کدام عامل بوده است.", "نتایج آزمایش بسیار دقیق‌تر خواهد شد.", "هیچ مشکلی در نتیجه ایجاد نمی‌شود."] },
+            { id: 19, question: "رسم نمودار ستونی یا خطی از نتایج آزمایش چه کمکی به کاوشگری ما می‌کند؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 3, options: ["آزمایش را سخت‌تر می‌کند.", "فقط برای زیبایی دفتر است.", "به درک بهتر رابطه بین عوامل و مقایسه آسان نتایج کمک می‌کند.", "فرضیه‌های غلط را پاک می‌کند."] },
+            { id: 20, question: "مفهوم «یادداشت‌برداری دقیق در حین آزمایش» چیست؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 1, options: ["ثبت دقیق اعداد، مشاهدات و اندازه‌ها در جدول به صورت منظم", "نوشتن فقط حدس و گمان‌های اولیه", "حفظ کردن اعداد در حافظه بدون نوشتن", "کشیدن نقاشی وسایل آزمایش"] },
+            { id: 21, question: "در یک کاوشگری علمی، پس از رد شدن یک فرضیه توسط آزمایش، کار درست چیست؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 3, options: ["دست کشیدن از پژوهش", "تغییر دادن دستکاری‌شده نتایج آزمایش", "طرح فرضیه جدید بر اساس نتایج و آزمایش دوباره", "قبول فرضیه بدون آزمایش"] },
+            { id: 22, question: "علم چیست و یادگیری آن چه فایده‌ای در زندگی دارد؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["تنها حفظ کردن نام وسایل آزمایشگاهی", "به کارگیری تفکر، مشاهده و تجربه برای شناخت بهتر دنیای اطراف و حل مسائل", "فقط انجام آزمایش‌های خطرناک", "خواندن بدون تجربه"] },
+            { id: 23, question: "اگر بخواهیم بدانیم جنس گلوله بر اندازه گودال اثر دارد یا نه، چه عاملی را تغییر می‌دهیم؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 1, options: ["جنس گلوله‌ها (مثلاً شیشه‌ای، آهنی، چوبی با اندازه برابر)", "ارتفاع رهاسازی", "نوع خاک ظرف", "شکل ظرف آزمایش"] },
+            { id: 24, question: "اگر یک تیله را با دست محکم به طرف خاک پرتاب کنیم (نه فقط رها کردن)، چه رخ می‌دهد؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["گودال کوچک‌تر می‌شود.", "به دلیل افزایش سرعت برخورد، قطر و عمق گودال بیشتر می‌شود.", "هیچ گودالی ایجاد نمی‌شود.", "خاک ظرف ذوب می‌شود."] },
+            { id: 25, question: "کدام گزینه نشان‌دهنده یک مشاهده دقیق علمی است؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 3, options: ["گفتن اینکه تیله بسیار زیبا بود.", "حدس زدن درباره وزن تیله بدون اندازه گرفتن.", "دیدن فرو رفتن تیله و اندازه‌گیری دقیق دهانه گودال با خط‌کش.", "پیش‌بینی آب و هوای فردا."] },
+            { id: 26, question: "در آزمایش رها کردن کاغذ، چرا یک ورقه کاغذ معمولی در هوا پیچ و تاب می‌خورد؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["به دلیل داشتن بار الکتریکی", "به دلیل برخورد مولکول‌های هوا با سطح پهن آن و مقاومت نامنظم هوا", "چون نیروی جاذبه روی آن ضعیف و قوی می‌شود", "به دلیل تغییر وزن کاغذ"] },
+            { id: 27, question: "اگر آزمایش گودال را در خاک مرطوب و خاک خشک انجام دهیم، رطوبت خاک چه نوع عاملی است؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 1, options: ["عاملی که تغییر داده‌ایم (متغیر مستقل)", "عاملی که اندازه می‌گیریم", "عاملی که باید ثابت بماند", "خطای آزمایش"] },
+            { id: 28, question: "چرا قبل از رها کردن تیله، سطح خاک داخل ظرف را کاملاً صاف و یکدست می‌کنیم؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["برای اینکه تیله خاک نخورد.", "برای اینکه شرایط اولیه ثابت باشد و اندازه دهانه گودال دقیق اندازه گرفته شود.", "برای اینکه خاک نرم‌تر شود.", "برای تغییر ارتفاع ظرف."] },
+            { id: 29, question: "کدام گزینه ترتیب درست مراحل روش علمی را نشان می‌دهد؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 3, options: ["آزمایش -> فرضیه -> نتیجه‌گیری -> مشاهده", "نتیجه‌گیری -> پرسش -> آزمایش -> فرضیه", "مشاهده و طرح پرسش -> ارائه فرضیه -> طراحی و انجام آزمایش -> نتیجه‌گیری", "فرضیه -> مشاهده -> نتیجه‌گیری -> آزمایش"] },
+            { id: 30, question: "مهارت اندازه‌گیری دقیق در علوم تجربی چه اهمیتی دارد؟", category: "درس 1 - زنگ علوم", type: "mcq", answer: 2, options: ["تنها سرعت کار را بالا می‌برد.", "امکان مقایسه درست، ثبت علمی داده‌ها و نتیجه‌گیری مطمئن را فراهم می‌کند.", "باعث زیباتر شدن گزارش می‌شود.", "نیاز به تکرار آزمایش را کاملاً از بین می‌برد."] },
+            { id: 31, question: "مراحل یک کاوشگری علمی را نام ببرید.", category: "درس 1 - زنگ علوم", type: "descriptive", answer: "۱. مشاهده دقیق ۲. طرح پرسش ۳. فرضیه‌سازی ۴. طراحی و اجرای آزمایش ۵. ثبت نتایج و نتیجه‌گیری." },
+            { id: 32, question: "«فرضیه» چیست و چه فرقی با یک حدس بدون فکر دارد؟", category: "درس 1 - زنگ علوم", type: "descriptive", answer: "فرضیه یک حدس هوشمندانه و بر پایه مشاهده است که برای بررسی علت یک پدیده بیان می‌شود و باید با آزمایش قابل رد یا اثبات باشد." },
+            { id: 33, question: "در آزمایش بررسی اثر ارتفاع بر قطر گودال، چه عاملی را تغییر دادیم، چه عاملی را اندازه گرفتیم و چه مواردی را ثابت نگه داشتیم؟", category: "درس 1 - زنگ علوم", type: "descriptive", answer: "تغییر دادیم: ارتفاع رها کردن گلوله. اندازه گرفتیم: قطر دهانه گودال. ثابت نگه داشتیم: نوع خاک و جرم و اندازه گلوله." },
+            { id: 34, question: "چرا تکرار آزمایش در کاوشگری‌های علمی بسیار مهم و ضروری است؟", category: "درس 1 - زنگ علوم", type: "descriptive", answer: "برای کم شدن خطاهای اتفاقی، اطمینان از درستی نتایج به دست آمده و رسیدن به پاسخی مطمئن و تکرارپذیر." },
+            { id: 35, question: "چرا یک برگ کاغذ مچاله شده زودتر از همان برگ کاغذ به صورت صاف به زمین می‌رسد؟", category: "درس 1 - زنگ علوم", type: "descriptive", answer: "چون سطح کاغذ مچاله کوچک‌تر شده و هوای کمتری زیر آن قرار می‌گیرد، در نتیجه نیروی مقاومت هوا در برابر آن کمتر است." },
+            { id: 36, question: "مفهوم «متغیر» در آزمایش‌های علوم چیست؟", category: "درس 1 - زنگ علوم", type: "descriptive", answer: "هر ویژگی، مقدار یا عاملی که می‌تواند در طول آزمایش تغییر کند یا مقادیر مختلفی به خود بگیرد." },
+            { id: 37, question: "اگر بخواهیم در آزمایش برخورد گلوله با خاک، اثر وزن گلوله را بررسی کنیم، چه متغیرهایی باید ثابت بمانند؟", category: "درس 1 - زنگ علوم", type: "descriptive", answer: "ارتفاع رهاسازی گلوله، نوع و رطوبت خاک ظرف، شکل گلوله‌ها و روش اندازه‌گیری گودال باید کاملاً ثابت بمانند." },
+            { id: 38, question: "یک فایده مهم رسم جدول و نمودار پس از انجام آزمایش را توضیح دهید.", category: "درس 1 - زنگ علوم", type: "descriptive", answer: "جدول و نمودار باعث سازماندهی اطلاعات، مقایسه سریع‌تر و آسان‌تر داده‌ها و کشف دقیق رابطه بین متغیرها می‌شوند." },
+            { id: 39, question: "آیا اگر نتیجه آزمایشی خلاف فرضیه ما باشد، آزمایش شکست خورده است؟ توضیح دهید.", category: "درس 1 - زنگ علوم", type: "descriptive", answer: "خیر؛ رد شدن فرضیه نیز یک نتیجه ارزشمند علمی است و به ما نشان می‌دهد باید به دنبال فرضیه جدیدی باشیم." },
+            { id: 40, question: "منظور از جمله «علم در زندگی ما جاری است» چیست؟ یک مثال بزنید.", category: "درس 1 - زنگ علوم", type: "descriptive", answer: "یعنی اصول علمی و کاوشگری فقط در آزمایشگاه نیست، بلکه در پدیده‌های ساده روزمره مانند افتادن برگ درخت، تهیه غذا و وسایل اطرافمان وجود دارد." },
+
+            // ==================== درس دوم: سرگذشت دفتر من (سوالات ۴۱ تا ۹۵) ====================
+            { id: 41, question: "انسان‌های اولیه برای ثبت و نگهداری اطلاعات، نقاشی‌های خود را بر کجا رسم می‌کردند؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["روی برگه‌های کاغذ", "روی دیواره غارها و سنگ‌ها", "روی تخته‌های پلاستیکی", "روی پارچه‌های نایلونی"] },
+            { id: 42, question: "کدام مورد از «معایب» اصلی ثبت اطلاعات روی سنگ و دیواره غارها بوده است؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 1, options: ["سنگین بودن، سختی در کنده‌کاری و عدم امکان حمل و نقل آسان", "فاسد شدن سریع در برابر رطوبت", "سوختن آسان در برابر آتش", "ارزان بودن بیش از حد سنگ"] },
+            { id: 43, question: "کدام مورد یکی از «مزایای» ثبت اطلاعات بر روی سنگ و صخره‌ها به شمار می‌رفت؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 3, options: ["جابه‌جایی سریع و سبک بودن", "قابلیت پاک کردن و نوشتن دوباره", "ماندگاری طولانی‌مدت در برابر شرایط محیطی", "در دسترس بودن برای تمام مردم شهرها"] },
+            { id: 44, question: "چرا انسان‌ها به مرور زمان به جای سنگ، به نوشتن روی پوست حیوانات و چوب روی آوردند؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["چون سنگ‌ها در طبیعت تمام شدند.", "برای اینکه سبک‌تر بودند و حمل و جابه‌جایی نوشته‌ها بسیار آسان‌تر شد.", "چون چوب مقاوم‌تر از سنگ بود.", "چون روی پوست نمی‌شد نقاشی کشید."] },
+            { id: 45, question: "کدام گزینه تنها شامل «مواد طبیعی» (با منشأ مستقیم از طبیعت) است؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 1, options: ["چوب، سنگ، پشم، چرم", "کاغذ، شیشه، پلاستیک، پنبه", "شیشه، نفت خام، ماسه، آهن", "لاستیک ماشین، چوب، گچ، سیمان"] },
+            { id: 46, question: "کدام دسته از مواد زیر، همگی جزء «مواد مصنوعی» هستند؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["پنبه، پشم، پوست", "کاغذ، پلاستیک، شیشه", "سنگ، طلا، چوب", "خاک رس، ماسه، آب"] },
+            { id: 47, question: "تعریف علمی «ماده مصنوعی» بر اساس کتاب علوم ششم چیست؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 3, options: ["ماده‌ای که در طبیعت بدون دخالت انسان ساخته می‌شود.", "ماده‌ای که هیچ کاربردی در زندگی بشر ندارد.", "ماده‌ای که انسان‌ها آن را با ایجاد تغییر در مواد طبیعی تولید می‌کنند.", "ماده‌ای که فقط در فضا یافت می‌شود."] },
+            { id: 48, question: "ماده اصلی و ماده اولیه برای تولید صنعتی کاغذ در کارخانه‌ها چیست؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["پلاستیک", "چوب درختان", "خاک رس", "سنگ آهن"] },
+            { id: 49, question: "کدام بخش از درخت برای تهیه خمیر کاغذ در کارخانه مناسب‌تر است؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 3, options: ["برگ‌ها و گل‌ها", "ریشه‌های نازک زیر خاک", "تنه محکم و ساقه چوبی درخت", "پوست بیرونی تنه درخت"] },
+            { id: 50, question: "اولین مرحله در کارخانه کاغذسازی پس از برش و انتقال تنه درختان چیست؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 1, options: ["کندن پوست تنه درختان", "افزودن آب‌اکسیژنه", "صاف کردن با غلتک", "رنگ‌آمیزی چوب"] },
+            { id: 51, question: "به قطعات بسیار ریز چوب خردشده که برای پختن و خمیرسازی آماده می‌شوند، چه می‌گویند؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["براده چوب", "چیپس چوب (تکه‌های ریز چوب)", "خاک اره", "پودر الوار"] },
+            { id: 52, question: "تبدیل تنه درخت به تکه‌های ریز چوب (چیپس چوب)، چه نوع تغییری است؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 1, options: ["تغییر فیزیکی", "تغییر شیمیایی", "تغییر هسته‌ای", "تغییر زیستی"] },
+            { id: 53, question: "رنگ طبیعی خمیر اولیه‌ای که از چوب به دست می‌آید چه رنگی است؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 3, options: ["سفید براق", "سبز تیره", "زرد مایل به قهوه‌ای", "آبی روشن"] },
+            { id: 54, question: "برای از بین بردن رنگ زرد و قهوه‌ای چوب و سفید کردن خمیر کاغذ، چه موادی به آن می‌افزایند؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["نشاسته و پلاستیک", "مواد رنگ‌بر مانند آب‌اکسیژنه، کلر یا آب‌ژاول", "گچ و خاک اره", "سرکه و آبلیمو"] },
+            { id: 55, question: "ویژگی مهم ماده «آب‌اکسیژنه» در صنعت کاغذسازی چیست؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 3, options: ["ایجاد چسبندگی در الیاف کاغذ", "افزایش بوی معطر کاغذ", "خاصیت رنگ‌بری و سفیدکنندگی قوی", "تبدیل کاغذ به پلاستیک"] },
+            { id: 56, question: "چرا آب‌اکسیژنه را باید در ظروف تیره و جای خنک و دور از نور نگهداری کرد؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["چون در نور یخ می‌زند.", "چون در برابر نور و گرما تجزیه شده و خاصیت خود را از دست می‌دهد.", "چون نور آن را تبدیل به اسید بسیار غلیظ می‌کند.", "چون رنگ ظرف را جذب می‌کند."] },
+            { id: 57, question: "برای اینکه کاغذ مقاومت بیشتری در برابر پاره شدن داشته باشد، چه ماده‌ای به خمیر می‌افزایند؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 1, options: ["نشاسته", "پودر گچ", "آب‌اکسیژنه", "رنگ‌های شیمیایی"] },
+            { id: 58, question: "برای اینکه کاغذ تولیدشده سطحی صاف و مات داشته باشد و جوهر روی آن پخش نشود، چه ماده‌ای اضافه می‌کنند؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["پلاستیک", "گچ یا پودر سنگ", "روغن مایع", "آب ژاول"] },
+            { id: 59, question: "برای تهیه کاغذهای ضدآب و براق (مانند کاغذ گلاسه)، از کدام ماده افزودنی استفاده می‌شود؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 3, options: ["گچ", "نشاسته", "پلاستیک (مواد پلیمری)", "سرکه"] },
+            { id: 60, question: "کدام گزینه از مهم‌ترین پیامدهای منفی قطع بی‌رویه درختان جنگل برای تهیه کاغذ است؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["افزایش اکسیژن در جو", "تجمع کربن‌دی‌اکسید، گرمایش زمین، جاری شدن سیل و تخریب زیستگاه جانوران", "کاهش دمای عمومی کره زمین", "کاهش بیابان‌ها"] },
+            { id: 61, question: "حدوداً برای تهیه هر یک تن کاغذ، چند اصله درخت تنومند باید قطع شود؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 3, options: ["۲ اصله درخت", "۵ اصله درخت", "حدود ۱۷ تا ۲۰ اصله درخت", "بیش از ۵۰۰ اصله درخت"] },
+            { id: 62, question: "«بازیافت کاغذ» به چه معناست؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 1, options: ["جمع‌آوری کاغذهای باطله و تبدیل دوباره آن‌ها به خمیر برای تولید کاغذ جدید", "سوزاندن کاغذهای کهنه برای تولید برق", "دفن کردن روزنامه‌ها در خاک جنگل", "رنگ کردن مجدد کاغذهای قدیمی"] },
+            { id: 63, question: "کدام مورد از مزایای مهم بازیافت کاغذ در مقایسه با تولید کاغذ از چوب است؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["مصرف آب بسیار بیشتر", "صرفه‌جویی در مصرف آب و برق و جلوگیری از نابودی جنگل‌ها", "تولید زباله‌های صنعتی بیشتر", "افزایش نیاز به قطع درختان"] },
+            { id: 64, question: "کدام نوع از کاغذهای باطله زیر برای بازیافت و تولید دوباره کاغذ خانگی «مناسب نیستند»؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 3, options: ["برگه‌های سفید دفترچه", "جعبه‌های مقوایی تمیز", "دستمال کاغذی کثیف و جعبه‌های آلوده به مواد بهداشتی", "روزنامه‌های باطله"] },
+            { id: 65, question: "چرا کیسه‌های نایلونی بازیافتی را معمولاً ضخیم‌تر از کیسه‌های نایلونی دست اول درست می‌کنند؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["چون نایلون بازیافتی سبک‌تر است.", "برای جبران کاهش مقاومت و پیوستگی الیاف در فرآیند بازیافت.", "برای اینکه مواد غذایی داخل آن مشخص نباشد.", "چون مواد اولیه بازیافتی ارزان‌تر است."] },
+            { id: 66, question: "در آزمایش تهیه کاغذ بازیافتی در کلاس، چرا از یک «توری» استفاده کردیم؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 1, options: ["برای آبگیری و جدا کردن الیاف خمیر از آب اضافی", "برای خرد کردن خرده‌های کاغذ", "برای افزودن رنگ به خمیر", "برای گرم کردن خمیر کاغذ"] },
+            { id: 67, question: "شیشه از کدام ماده طبیعی موجود در طبیعت ساخته می‌شود؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["نفت خام", "ماسه و سیلیس", "چوب درخت", "خاک رس"] },
+            { id: 68, question: "پلاستیک‌ها جزء مواد مصنوعی هستند. ماده اصلی تولید پلاستیک چیست؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 3, options: ["پشم گوسفند", "ماسه دریا", "نفت خام", "پودر سنگ مرمر"] },
+            { id: 69, question: "کدام فناوری جدید به تولید کاغذ «بدون قطع حتی یک درخت» کمک کرده است؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 1, options: ["تولید کاغذ از پودر سنگ آهک (کاغذ سنگی)", "تولید کاغذ از پوست میوه‌ها", "استفاده از چرم طبیعی", "استفاده از شیشه‌های نازک"] },
+            { id: 70, question: "کدام کار توسط ما دانش‌آموزان به مصرف کمتر کاغذ در کشور کمک می‌کند؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["خط خطی کردن کاغذهای سفید", "استفاده از هر دو روی برگه‌های دفتر و تفکیک زباله‌های کاغذی", "دور ریختن دفترهای نیمه‌کاره در سطل زباله معمولی", "سوزاندن کتاب‌های درسی قدیمی"] },
+            { id: 71, question: "در کارخانه، آب اضافی خمیر پس از گذشتن از توری، چگونه کاملاً گرفته و خشک می‌شود؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 3, options: ["با قرار دادن خمیر در فریزر", "با ریختن اسید روی خمیر", "با عبور دادن ورقه‌های خمیر از میان غلتک‌های بزرگ آهنی و گرم", "با بادبزن دستی"] },
+            { id: 72, question: "قرآن کریم در سوره حدید آیه ۲۵ انسان‌ها را به تفکر درباره کدام ماده و منافع آن دعوت فرموده است؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["طلا", "آهن", "چوب", "مس"] },
+            { id: 73, question: "اگر به خمیر کاغذ گچ اضافه نکنیم، چه مشکلی در نوشتن روی کاغذ رخ می‌دهد؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 1, options: ["جوهر خودکار یا قلم پخش می‌شود و کاغذ بیش از حد شفاف یا نامناسب می‌ماند.", "کاغذ بلافاصله آتش می‌گیرد.", "کاغذ بوی نامطبوع پیدا می‌کند.", "نوشته‌ها ناپدید می‌شوند."] },
+            { id: 74, question: "چه عاملی در تاریخ باعث اختراع و گسترش صنعت کاغذسازی به جای روش‌های سنتی شد؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["تمام شدن درختان جنگلی", "افزایش جمعیت بشر، پیشرفت علم و نیاز به کتاب و آموزش برای همگان", "کشف نفت خام در زمین", "دستور حاکمان برای ممنوعیت سنگ"] },
+            { id: 75, question: "کدام مورد یک تغییر شیمیایی در فرآیند تولید کاغذ محسوب می‌شود؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 3, options: ["بریدن تنه‌های چوب با اره", "خرد کردن الوار به چیپس چوب", "بی‌رنگ کردن خمیر چوب با آب‌اکسیژنه و کلر", "رول کردن کاغذ دور استوانه"] },
+            { id: 76, question: "مزایا و معایب ثبت اطلاعات بر روی سنگ و دیوار غارها را بنویسید.", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "مزیت: ماندگاری بسیار طولانی و مقاوم در برابر آب و باد. عیب: سنگین بودن، سختی در کنده‌کاری، عدم امکان جابه‌جایی و در دسترس نبودن برای همه." },
+            { id: 77, question: "ماده طبیعی و ماده مصنوعی را تعریف کنید و برای هرکدام دو مثال بزنید.", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "ماده طبیعی در طبیعت وجود دارد و بدون تغییر زیاد مصرف می‌شود (مثل چوب، پشم). ماده مصنوعی را انسان با انجام تغییرات شیمیایی روی مواد طبیعی می‌سازد (مثل کاغذ، پلاستیک)." },
+            { id: 78, question: "چهار مرحله اصلی از تولید کاغذ در کارخانه را نام ببرید.", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "۱. قطع درخت و کندن پوست آن ۲. چیپس کردن چوب ۳. ساخت خمیر و رنگ‌بری با آب‌اکسیژنه ۴. آبگیری، پرس و خشک کردن با غلتک‌های آهنی." },
+            { id: 79, question: "نقش ماده «آب‌اکسیژنه» در کارخانه کاغذسازی چیست؟ چه هشداری برای نگهداری آن وجود دارد؟", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "خاصیت رنگ‌بری و سفیدکنندگی خمیر زرد چوب را دارد. باید در جای خنک، تاریک و دور از نور نگهداری شود چون نور آن را تجزیه می‌کند." },
+            { id: 80, question: "چرا به خمیر کاغذ نشاسته و گچ اضافه می‌کنند؟ فایده هرکدام را جداگانه بنویسید.", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "نشاسته: برای افزایش استحکام، مقاومت و پاره نشدن کاغذ. گچ (پودر سنگ): برای سفید شدن، مات شدن و جلوگیری از پخش شدن جوهر روی کاغذ." },
+            { id: 81, question: "سه فایده مهم بازیافت کاغذ برای محیط زیست و کشور را بیان کنید.", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "۱. جلوگیری از قطع بی‌رویه درختان جنگل ۲. صرفه‌جویی در مصرف آب و انرژی برق ۳. کاهش حجم زباله‌ها و آلودگی هوا." },
+            { id: 82, question: "چرا نمی‌توان همه انواع کاغذها (مانند دستمال کاغذی آلوده یا کاغذهای روغنی) را بازیافت کرد؟", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "زیرا دستمال کاغذی آلوده باعث شیوع بیماری‌ها می‌شود و الیاف بسیار کوتاهی دارد؛ کاغذهای چرب و روغنی نیز فرآیند خمیرسازی را مختل می‌کنند." },
+            { id: 83, question: "تفاوت کاغذ بازیافتی با کاغذی که مستقیماً از تنه چوب ساخته شده چیست؟", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "کاغذ بازیافتی مقاومت و سفیدی کمتری دارد، کمی تیره‌تر است اما تولید آن به درختان صدمه نمی‌زند و آب و برق کمتری مصرف می‌کند." },
+            { id: 84, question: "قطع بی‌رویه درختان چگونه باعث آلودگی هوا و گرم شدن کره زمین می‌شود؟", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "درختان با فتوسنتز گاز کربن‌دی‌اکسید را جذب و اکسیژن تولید می‌کنند. با قطع آن‌ها، کربن‌دی‌اکسید در جو زیاد شده و زمین گرم‌تر می‌شود." },
+            { id: 85, question: "ما دانش‌آموزان برای کاهش مصرف کاغذ و حفظ درختان چه وظایفی در خانه و مدرسه داریم؟", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "استفاده کامل از تمام خطوط دفتر، تفکیک کاغذ باطله از سایر زباله‌ها، اهدای کتاب‌های سال قبل و استفاده از فناوری‌های الکترونیکی به جای کاغذ." },
+            { id: 86, question: "«کاغذ سنگی» چیست و چه مزیتی نسبت به کاغذ معمولی دارد؟", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "کاغذی که از پودر سنگ آهک (کربنات کلسیم) و پلاستیک ساخته می‌شود. برای تولید آن هیچ درختی قطع نمی‌شود و نیازی به مصرف فراوان آب ندارد." },
+            { id: 87, question: "چرا پوست تنه درختان قبل از خمیرسازی حتماً باید جدا شود؟", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "چون پوست درخت الیاف مناسب کاغذسازی را ندارد، بسیار تیره است و کیفیت و سفیدی کاغذ را به شدت پایین می‌آورد." },
+            { id: 88, question: "اگر در مرحله خمیرسازی به چوب ماده سفیدکننده نزنند، محصول نهایی چه خواهد بود؟", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "کاغذی کدر به رنگ زرد یا قهوه‌ای تیره (مانند مقوای کارتن‌های ضخیم) تولید می‌شود که برای نوشتن و چاپ کتاب مناسب نیست." },
+            { id: 89, question: "چرا کارخانه‌های کاغذسازی معمولاً در نزدیکی منابع پرآب یا رودخانه‌ها ساخته می‌شوند؟", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "زیرا مراحل شستشو، خمیرسازی، رقیق‌سازی و فرآوری چوب به حجم بسیار عظیمی از آب شیرین نیاز دارد." },
+            { id: 90, question: "منظور از الیاف سلولزی در کاغذ چیست و از کجا به دست می‌آید؟", category: "درس 2 - سرگذشت دفتر من", type: "descriptive", answer: "رشته‌های باریک و مقاومی که دیواره سلول‌های گیاهی و تنه چوب را تشکیل می‌دهند و اسکلت اصلی برگه‌های کاغذ هستند." },
+            { id: 91, question: "کدام اختراع مسلمانان در سمرقند موجب دگرگونی ثبت علم در جهان شد؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 1, options: ["ساخت کاغذ با کیفیت بالا از الیاف کتان و چوب", "کشف سنگ مرمر", "اختراع پلاستیک", "ساخت لوح گلی"] },
+            { id: 92, question: "کدام یک از وسایل زیر از ماده طبیعی تهیه شده است؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["خط‌کش پلاستیکی", "ژاکت پشمی بافته‌شده از پشم گوسفند", "جلد کتاب نایلونی", "لیوان بلورین"] },
+            { id: 93, question: "چرا چرم طبیعی به عنوان ماده طبیعی دسته‌بندی می‌شود؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 3, options: ["چون در آزمایشگاه ساخته شده است.", "چون از ترکیب نفت و شیشه به دست می‌آید.", "چون مستقیماً از پوست حیوانات در طبیعت به دست آمده و با کمترین تغییر ساختاری به کار می‌رود.", "چون خاصیت آهنربایی دارد."] },
+            { id: 94, question: "افزودن پلاستیک به کاغذ چه ویژگی در آن به وجود می‌آورد؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 2, options: ["کاغذ را شکننده و پودری می‌کند.", "کاغذ را براق کرده و به آن خاصیت ضدآب می‌دهد.", "باعث حل شدن کاغذ در آب می‌شود.", "کاغذ را سنگین و مات می‌سازد."] },
+            { id: 95, question: "یک تن کاغذ معادل مصرف چه مقداری است؟", category: "درس 2 - سرگذشت دفتر من", type: "mcq", answer: 1, options: ["حدود ۱۷ تا ۲۰ درخت، مقدار زیادی آب و انرژی برق فراوان", "تنها نیم لیتر آب", "تنها یک شاخه درخت باریک", "هیچ نیازی به منابع ندارد."] },
+
+            // ==================== درس سوم: کارخانه کاغذسازی (سوالات ۹۶ تا ۱۵۰) ====================
+            { id: 96, question: "کدام فلز به دلیل فراوانی، قیمت مناسب و استحکام بالا بیشترین کاربرد را در کارخانه‌ها دارد؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["مس", "طلا", "آهن", "سرب"] },
+            { id: 97, question: "اره‌ها، رنده‌ها و دستگاه‌های خردکن چوب در کارخانه کاغذسازی از چه فلزی ساخته می‌شوند؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["آلومینیم", "آهن و فولاد سخت", "مس انعطاف‌پذیر", "سرب سنگین"] },
+            { id: 98, question: "چرا در مرحله پایانی کارخانه کاغذسازی، غلتک‌های خشک‌کن را از جنس «آهن» می‌سازند؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 1, options: ["چون آهن سنگین، سخت و محکم است و گرما را خیلی خوب منتقل می‌کند.", "چون آهن در آب حل می‌شود.", "چون آهن سبک‌ترین فلز طبیعت است.", "چون آهن هرگز گرم نمی‌شود."] },
+            { id: 99, question: "کدام مورد از ویژگی‌های مشترک و عمومی تمام فلزات است؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["همگی عایق جریان برق و حرارت هستند.", "همگی در دمای اتاق مایع هستند.", "رسانای جریان برق و گرما هستند و در اثر ضربه چکش‌خواری دارند.", "همگی در تماس با هوا آتش می‌گیرند."] },
+            { id: 100, question: "تنها فلزی که در دمای اتاق به حالت «مایع» دیده می‌شود کدام است؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["آهن", "جیوه", "مس", "سرب"] },
+            { id: 101, question: "ویژگی «چکش‌خواری» در فلزات به چه معناست؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["با ضربه چکش خرد و پودر می‌شوند.", "با وارد آمدن ضربه نمی‌شکنند بلکه پهن شده و به ورقه یا سیم تبدیل می‌شوند.", "در اثر ضربه ذوب می‌شوند.", "همیشه به رنگ اولیه خود برمی‌گردند."] },
+            { id: 102, question: "اگر سه مکعب هم‌اندازه (هم‌حجم) از جنس چوب، پلاستیک و آهن داشته باشیم، کدام سنگین‌تر است؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["مکعب چوبی", "مکعب پلاستیکی", "مکعب آهنی", "هر سه دقیقاً وزن برابر دارند."] },
+            { id: 103, question: "اگر یک قطعه آهن و یک قطعه چوب‌پنبه را داخل ظرف آب بیندازیم، چه رخ می‌دهد؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 1, options: ["آهن به دلیل سنگینی در آب فرو می‌رود، اما چوب‌پنبه روی سطح آب شناور می‌ماند.", "هر دو روی آب شناور می‌مانند.", "چوب‌پنبه ته ظرف می‌رود و آهن بالا می‌ماند.", "آهن در آب حل می‌شود."] },
+            { id: 104, question: "اگر با یک میخ آهنی روی تخته چوبی و پلاستیک بکشیم، روی آن‌ها خط می‌افتد. این آزمایش چه چیزی را نشان می‌دهد؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["چوب سخت‌تر از آهن است.", "سختی آهن از چوب و پلاستیک بیشتر است.", "آهن خاصیت رسانایی دارد.", "پلاستیک سنگین‌تر از آهن است."] },
+            { id: 105, question: "سیم‌های رابط برق در ساختمان‌ها را معمولاً از کدام فلز می‌سازند و چرا؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 1, options: ["مس؛ چون رسانایی الکتریکی عالی دارد و انعطاف‌پذیر است.", "آهن؛ چون به راحتی زنگ می‌زند.", "طلا؛ چون بسیار ارزان و فراوان است.", "سرب؛ چون بسیار سبک است."] },
+            { id: 106, question: "چرا روکش قرص‌ها، شکلات‌ها و درپوش برخی ظروف غذا را از ورقه آلومینیم می‌سازند؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["چون آلومینیم فلزی سمی است.", "چون آلومینیم سنگین‌تر از آهن است.", "چون سبک است، به راحتی ورقه بسیار نازک می‌شود و با هوا و غذا واکنش نامناسب نمی‌دهد.", "چون بسیار گران‌قیمت است."] },
+            { id: 107, question: "کدام ویژگی فلز طلا باعث شده که از گذشته تاکنون در ساخت جواهرات و زینت‌آلات استفاده شود؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["سختی بسیار شدید و خط نینداختن", "زیبایی و درخشندگی، چکش‌خواری عالی و زنگ نزدن در هوا و آب", "فراوانی فوق‌العاده در خاک", "سبک‌تر بودن از چوب‌پنبه"] },
+            { id: 108, question: "هشدار مهم کتاب درسی درباره فلز «سرب» چیست؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["سرب فلزی سبک است.", "سرب در دمای اتاق مایع است.", "سرب فلزی سمی و خطرناک است و نباید برای نگهداری آب و مواد غذایی استفاده شود.", "سرب رسانای برق نیست."] },
+            { id: 109, question: "اسیدها به طور کلی چه مزه‌ای دارند؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 1, options: ["ترش", "شیرین", "تلخ", "شور"] },
+            { id: 110, question: "کدام گزینه تنها شامل «اسیدهای خوراکی» است؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["جوهر نمک، سرکه، آبلیمو", "آبلیمو، سرکه، آبغوره، اسید میوه‌ها", "جوهر نمک، وایتکس، اسید باتری", "آب پرتقال، جوهر نمک، صابون"] },
+            { id: 111, question: "کدام گزینه یک «اسید صنعتی» قوی و خطرناک است؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["سرکه سیب", "آبغوره", "جوهر نمک", "آب نارنج"] },
+            { id: 112, question: "اسیدها چه اثری روی رنگ کاغذ شناساگر (کاغذ پی‌اچ یا تورنسل) می‌گذارند؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["آن را آبی پررنگ می‌کنند.", "آن را به رنگ قرمز یا مایل به سرخ تغییر می‌دهند.", "رنگ کاغذ را زرد براق می‌کنند.", "کاغذ را کاملاً بی‌رنگ و ناپدید می‌کنند."] },
+            { id: 113, question: "اگر مقداری جوهر نمک را روی یک تکه سنگ مرمر یا آهک بریزیم، چه اتفاقی می‌افتد؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 1, options: ["جوشش رخ می‌دهد و حباب‌های گاز تولید می‌شود (تغییر شیمیایی).", "سنگ مرمر منجمد می‌شود.", "سنگ مرمر تبدیل به طلا می‌شود.", "هیچ اثری دیده نمی‌شود."] },
+            { id: 114, question: "اگر مقداری اسید روی فلزاتی مانند آهن یا آلومینیم ریخته شود، چه رخ می‌دهد؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["فلز درخشان‌تر می‌شود و تغییر نمی‌کند.", "فلز یخ می‌زند.", "اسید با فلز واکنش داده، آن را می‌خورد (خاصیت خورندگی) و گاز تولید می‌شود.", "فلز تبدیل به چوب می‌شود."] },
+            { id: 115, question: "چرا هرگز نباید مواد شوینده اسیدی (مانند جوهر نمک) را با مواد سفیدکننده (مانند وایتکس) مخلوط کرد؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["چون بوی گل رز تولید می‌کنند.", "چون گاز بسیار خطرناک، سمی و کشنده‌ای (گاز کلر) آزاد می‌شود که به شش‌ها آسیب شدید می‌زند.", "چون قدرت تمیزکنندگی صفر می‌شود.", "چون ظرف آن آتش می‌گیرد."] },
+            { id: 116, question: "هنگام کار با جوهر نمک در خانه (برای تمیز کردن سرویس)، چه اقداماتی ضروری است؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 1, options: ["پوشیدن دستکش، زدن ماسک، باز کردن پنجره‌ها و روشن کردن هواکش", "بستن در و پنجره‌ها و تنفس عمیق", "چشیدن اسید برای اطمینان از خلوص آن", "مخلوط کردن سریع آن با آب جوش و صابون"] },
+            { id: 117, question: "چرا نباید ماست ترش، آبغوره و ترشیجات را در ظروف مسی یا روییِ بدون روکش نگهداری کرد؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["چون طعم غذا شیرین می‌شود.", "چون ظروف سنگین‌تر می‌شوند.", "چون اسید موجود در غذا به مرور زمان فلز ظرف را در خود حل کرده و مواد سمی و بیماری‌زا وارد غذا می‌کند.", "چون ظروف فلزی می‌شکنند."] },
+            { id: 118, question: "چرا رها کردن پساب و فاضلاب اسیدی کارخانه‌ها در آب رودخانه‌ها خطرناک است؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["چون آب رودخانه یخ می‌زند.", "چون باعث تغییر خاصیت شیمیایی آب و مسمومیت و مرگ ماهی‌ها و گیاهان آبزی می‌شود.", "چون بوی عطر در رودخانه پخش می‌شود.", "چون رودخانه خشک می‌شود."] },
+            { id: 119, question: "کدام میوه زیر ترش‌مزه بوده و دارای اسید خوراکی طبیعی است؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 1, options: ["لیموترش و کیوی", "موز شیرین", "خرما و نارگیل", "خیار و خربزه"] },
+            { id: 120, question: "چرا سیم‌های برق روی دکل‌های فشار قوی بین شهری را از فلز «آلومینیم» می‌سازند؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["چون آلومینیم از مس سنگین‌تر است.", "چون آلومینیم سبک است و وزن سیم‌ها دکل‌ها را خم نمی‌کند، ضمن اینکه رسانای خوبی برای برق است.", "چون آهن در برابر باد پاره می‌شود.", "چون ارزان‌تر از پلاستیک است."] },
+            { id: 121, question: "چه ویژگی باعث شده که آهن پرکاربردترین فلز در صنعت ساخت‌وساز و پل‌سازی باشد؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["سبک بودن در آب", "تغییر نکردن در رطوبت", "فراوانی، ارزان بودن، سختی و مقاومت بسیار بالا در برابر نیرو و ضربه", "مایع بودن در دمای معمولی"] },
+            { id: 122, question: "زنگ زدن آهن در هوای مرطوب چه نوع تغییری است و چه نشانه‌ای دارد؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 1, options: ["تغییر شیمیایی؛ تبدیل آهن به ماده‌ای قهوه‌ای-نارنجی و شکننده در اثر واکنش با اکسیژن و رطوبت", "تغییر فیزیکی؛ چون فقط شکل آهن عوض می‌شود", "تغییر فیزیکی؛ به دلیل تغییر حالت به مایع", "تغییر زیستی در گیاهان"] },
+            { id: 123, question: "چرا روی درها و پنجره‌های آهنی حیاط را با لایه‌ای از رنگ می‌پوشانند؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["برای اینکه آهن سنگین‌تر شود.", "برای جلوگیری از تماس مستقیم آهن با اکسیژن و رطوبت هوا و پیشگیری از زنگ‌زدگی.", "برای اینکه آهن چکش‌خوار شود.", "برای اینکه آهن گرما را رد نکند."] },
+            { id: 124, question: "اگر دو قاشق چوبی و آهنی را همزمان در یک فنجان چای داغ قرار دهیم، کدام زودتر گرم می‌شود؟ چرا؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 1, options: ["قاشق آهنی؛ چون آهن رسانای خوب گرماست و حرارت را به سرعت منتقل می‌کند.", "قاشق چوبی؛ چون چوب گرما را تولید می‌کند.", "هر دو در یک زمان یکسان گرم می‌شوند.", "هیچ‌کدام گرم نمی‌شوند."] },
+            { id: 125, question: "کدام گزینه فلزات مس، طلا و آهن را از نظر رسانایی الکتریکی به درستی مقایسه می‌کند؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["آهن رساناترین فلز دنیاست.", "هیچ‌کدام رسانای برق نیستند.", "طلا و مس رسانایی الکتریکی بسیار بیشتری نسبت به آهن دارند.", "مس اصلاً برق را عبور نمی‌دهد."] },
+            { id: 126, question: "چهار ویژگی مهم فلز آهن که سبب استفاده گسترده از آن در کارخانه‌ها شده است را نام ببرید.", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "۱. فراوانی در معادن زمین ۲. هزینه استخراج ارزان و قیمت مناسب ۳. استحکام، مقاومت و سختی بالا ۴. رسانایی خوب گرما و برق." },
+            { id: 127, question: "ویژگی‌های عمومی و مشترک فلزات را نام ببرید.", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "۱. رسانای خوب گرما و جریان الکتریسیته ۲. چکش‌خواری و تغییر شکل در اثر ضربه ۳. داشتن درخشندگی فلزی ۴. به جز جیوه همگی در دمای اتاق جامدند." },
+            { id: 128, question: "تنها فلز مایع در دمای اتاق چه نام دارد و چه کاربردی دارد؟", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "فلز جیوه؛ در ساخت دماسنج‌ها و فشارسنج‌ها به دلیل انبساط منظم و مایع بودن به کار می‌رود." },
+            { id: 129, question: "مفهوم «چکش‌خواری» در فلزات را توضیح دهید و با یک نافلز مقایسه کنید.", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "یعنی با ضربه چکش خرد و پودر نمی‌شوند، بلکه پهن شده و تغییر شکل می‌دهند؛ در حالی که نافلزی مانند گوگرد یا شیشه در اثر ضربه خرد می‌شود." },
+            { id: 130, question: "دو دلیل مهم برای استفاده از فلز مس در سیم‌های برق ساختمان را بنویسید.", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "۱. رسانایی الکتریکی بسیار بالا پس از نقره ۲. چکش‌خواری و انعطاف‌پذیری عالی که به راحتی به سیم‌های باریک تبدیل می‌شود." },
+            { id: 131, question: "چرا برای آبگیری و خشک کردن کاغذ در کارخانه‌ها، از غلتک‌های بزرگ آهنی استفاده می‌شود؟", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "چون آهن سنگین و مقاوم است و فشار بالایی برای خارج کردن آب وارد می‌کند؛ همچنین رسانای گرماست و با انتقال حرارت، تبخیر آب را سرعت می‌بخشد." },
+            { id: 132, question: "اسیدهای خوراکی و اسیدهای صنعتی را با هم مقایسه کرده و برای هرکدام دو مثال بزنید.", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "اسید خوراکی: مزه ترش دارند، برای مصرف انسان بی‌خطرند (مثل آبلیمو، سرکه). اسید صنعتی: بسیار قوی، خورنده، سمی و خطرناک برای پوست و تنفس هستند (مثل جوهر نمک، اسید باتری)." },
+            { id: 133, question: "کاغذ پی‌اچ (شناساگر) چیست و اسیدها چه اثری روی رنگ آن می‌گذارند؟", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "وسیله‌ای برای شناسایی خاصیت اسیدی یا بازی مواد؛ مواد اسیدی رنگ کاغذ پی‌اچ را به سمت قرمز و نارنجی تغییر می‌دهند." },
+            { id: 134, question: "چرا ترکیب کردن جوهر نمک با مواد سفیدکننده (مانند وایتکس) بسیار خطرناک است؟", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "زیرا یک واکنش شیمیایی شدید رخ داده و گاز کلر آزاد می‌شود که گازی به شدت سمی، خفه‌کننده و کشنده است و به ریه آسیب می‌زند." },
+            { id: 135, question: "هنگام کار با جوهر نمک برای تمیز کردن، چه نکات ایمنی را باید رعایت کنیم؟", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "استفاده از ماسک و دستکش پلاستیکی، روشن کردن هواکش یا باز گذاشتن پنجره‌ها، پرهیز از بوییدن یا لمس آن و عدم مخلوط کردن با شوینده‌های دیگر." },
+            { id: 136, question: "چرا نباید آبلیمو، ترشی یا ماست ترش را در ظروف فلزی نگهداری کنیم؟", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "چون این خوراکی‌ها خاصیت اسیدی دارند و با فلز ظرف واکنش داده، فلز را در خود حل کرده و ترکیبات سمی و مضر وارد غذا می‌کنند." },
+            { id: 137, question: "چرا ریختن فاضلاب کارخانه‌ها در آب رودخانه‌ها محیط زیست را نابود می‌کند؟", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "چون پساب کارخانه‌ها دارای مواد اسیدی و سمی است که آب را آلوده کرده و باعث مرگ ماهی‌ها، آبزیان و گیاهان می‌شود." },
+            { id: 138, question: "سختی آهن، چوب و پلاستیک را با هم مقایسه کنید. چگونه این موضوع را آزمایش می‌کنید؟", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "آهن سخت‌تر از چوب و پلاستیک است؛ اگر با یک میخ آهنی روی چوب و پلاستیک بکشیم، روی آن‌ها خط می‌افتد، یعنی آهن سخت‌تر است." },
+            { id: 139, question: "چرا طلا با گذشت زمان زنگ نمی‌زند و کدر نمی‌شود؟", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "زیرا طلا فلزی بسیار کم‌واکنش است و با اکسیژن و رطوبت هوا ترکیب نمی‌شود و درخشندگی خود را همیشه حفظ می‌کند." },
+            { id: 140, question: "آهن زنگ‌نزن (استیل) چیست و چه فایده‌ای در زندگی دارد؟", category: "درس 3 - کارخانه کاغذسازی", type: "descriptive", answer: "ترکیبی از آهن با فلزات دیگر مانند کروم است که در برابر رطوبت و اکسیژن زنگ نمی‌زند و برای ساخت قاشق، چنگال و وسایل پزشکی به کار می‌رود." },
+            { id: 141, question: "کدام فلز به خاطر سبکی و مقاومت در ساخت بدنه هواپیماها کاربرد فراوان دارد؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 1, options: ["آلومینیم", "آهن سنگین", "سرب", "مس"] },
+            { id: 142, question: "چرا دستگیره قابلمه‌های فلزی را از جنس پلاستیک یا چوب می‌سازند؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["برای اینکه سنگین‌تر شود.", "چون چوب و پلاستیک عایق گرما هستند و دست هنگام آشپزی نمی‌سوزد.", "برای اینکه قابلمه زودتر بجوشد.", "چون پلاستیک چکش‌خوار است."] },
+            { id: 143, question: "اگر مقداری جوهر نمک روی پوست دست بریزد، بلافاصله چه اقدامی باید انجام داد؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["مالیدن روغن به دست", "پوشاندن دست با پارچه خشک", "شستشوی فوری دست با مقدار بسیار زیادی آب سرد جاری", "ریختن سرکه روی دست"] },
+            { id: 144, question: "تفاوت رسانایی آهن و مس در چیست؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["آهن رسانای بهتری از مس است.", "مس رسانایی الکتریکی و گرمایی بسیار بالاتری نسبت به آهن دارد.", "هیچ‌کدام رسانا نیستند.", "آهن برق را رد نمی‌کند."] },
+            { id: 145, question: "در کارخانه کاغذسازی، استفاده از اسید علاوه بر رنگ‌بر به چه منظوری است؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 1, options: ["برای حل کردن و پاک کردن ناخالصی‌های فلزی که از دستگاه‌ها وارد خمیر شده‌اند.", "برای چسباندن کاغذ به غلتک", "برای ایجاد بوی خوش در دفترچه", "برای سنگین کردن کاغذ"] },
+            { id: 146, question: "کدام یک از رفتارهای زیر درباره کار با اسیدها خطرناک و نادرست است؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["شستن دست پس از کار", "استفاده از ماسک فیلتردار", "چشیدن یا بو کردن مستقیم مایع برای تشخیص اسید بودن آن", "استفاده از عینک محافظ"] },
+            { id: 147, question: "چرا فلز سرب برای ساخت لوله‌های انتقال آب آشامیدنی در گذشته ممنوع شد؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["چون آب را کدر می‌کرد.", "چون سرب در آب حل شده و باعث مسمومیت شدید و بیماری‌های خطرناک مغزی و خونی می‌شود.", "چون لوله‌ها یخ می‌زدند.", "چون سرب بسیار سبک بود."] },
+            { id: 148, question: "کدام ماده می‌تواند اثر لکه اسید را تا حدودی خنثی کند و بشوید؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 1, options: ["آب فراوان و مواد بازی ملایم مانند جوش شیرین", "سرکه غلیظ", "آبغوره", "جوهر نمک"] },
+            { id: 149, question: "کدام ابزار آزمایشگاهی برای سنجش دقیق خاصیت اسیدی یا بازی مواد به کار می‌رود؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 2, options: ["دماسنج الکلی", "کاغذ پی‌اچ (pH) یا تورنسل", "استوانه مدرج شیشه‌ای", "ترازوی دیجیتال"] },
+            { id: 150, question: "چرا خداوند در قرآن از آهن به عنوان فلزی با «نیروی شدید و سودمند» یاد کرده است؟", category: "درس 3 - کارخانه کاغذسازی", type: "mcq", answer: 3, options: ["چون کمیاب است و در کوه‌ها نیست.", "چون سبک‌ترین ماده روی زمین است.", "چون استحکام و سختی بالایی دارد و پایه و اساس ساخت تمام ابزارها، ساختمان‌ها، پل‌ها و صنایع بشر است.", "چون مایع است."] }
+        ];
+
+        // فاصله‌های مرور جعبه لایتنر (روزهای ۱، ۲، ۴، ۸)
+        const LEITNER_INTERVALS = { 1: 1, 2: 2, 3: 4, 4: 8 };
+        const STORAGE_KEY = 'oloom6_150_questions_leitner_v3';
+        
+        let appData = {
+            currentStudent: null,
+            students: {}
+        };
+
+        let currentQuestion = null;
+        let questionAnswered = false;
+        let lastObservedDayStamp = null;
+
+        function getSystemDayStamp() {
+            const now = new Date();
+            return Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000);
+        }
+
+        function formatPersianDateFromDayStamp(dayStamp) {
+            const utcMs = dayStamp * 86400000;
+            const temp = new Date(utcMs);
+            const localDate = new Date(temp.getUTCFullYear(), temp.getUTCMonth(), temp.getUTCDate());
+            try {
+                return new Intl.DateTimeFormat('fa-IR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }).format(localDate);
+            } catch (e) {
+                return localDate.toLocaleDateString('fa-IR');
+            }
+        }
+
+        function updateLiveSystemClock() {
+            const now = new Date();
+            const todayStamp = getSystemDayStamp();
+
+            document.getElementById('current-date-display').textContent = formatPersianDateFromDayStamp(todayStamp);
+
+            try {
+                document.getElementById('current-time-display').textContent = new Intl.DateTimeFormat('fa-IR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                }).format(now);
+            } catch (e) {
+                document.getElementById('current-time-display').textContent = now.toLocaleTimeString('fa-IR');
+            }
+
+            if (lastObservedDayStamp !== null && todayStamp !== lastObservedDayStamp) {
+                lastObservedDayStamp = todayStamp;
+                if (appData.currentStudent) {
+                    updateHeaderAndStats();
+                    if (!currentQuestion) loadNextQuestion();
+                    if (document.getElementById('view-leitner').classList.contains('active')) renderLeitnerTable();
+                }
+            } else {
+                lastObservedDayStamp = todayStamp;
+            }
+        }
+
+        function loadStorage() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    appData = Object.assign({ currentStudent: null, students: {} }, JSON.parse(raw));
+                }
+            } catch (e) {
+                console.error('Error loading storage:', e);
+            }
+        }
+
+        function saveStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            } catch (e) {
+                console.error('Error saving storage:', e);
+            }
+        }
+
+        function ensureStudentProfile(name) {
+            const cleanName = name.trim();
+            if (!appData.students[cleanName]) {
+                appData.students[cleanName] = {
+                    name: cleanName,
+                    score: 0,
+                    correctMcqCount: 0,
+                    lastActiveStamp: getSystemDayStamp(),
+                    cards: {}
+                };
+            }
+            return appData.students[cleanName];
+        }
+
+        function getCardState(student, qId) {
+            if (!student.cards[qId]) {
+                return {
+                    box: 0,
+                    nextReviewDay: 0,
+                    lastReviewedDay: null,
+                    wrongCount: 0
+                };
+            }
+            return student.cards[qId];
+        }
+
+        function isCardDue(cardState, todayStamp) {
+            return cardState.box >= 1 && cardState.box <= 4 && cardState.nextReviewDay <= todayStamp;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStorage();
+            renderSavedUsersOnLogin();
+            updateLiveSystemClock();
+            setInterval(updateLiveSystemClock, 1000);
+
+            if (appData.currentStudent && appData.students[appData.currentStudent]) {
+                enterGameAs(appData.currentStudent);
+            }
+        });
+
+        function renderSavedUsersOnLogin() {
+            const names = Object.keys(appData.students);
+            const container = document.getElementById('saved-users-container');
+            const list = document.getElementById('saved-users-list');
+            if (names.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            container.style.display = 'block';
+            list.innerHTML = '';
+            names.forEach(name => {
+                const st = appData.students[name];
+                const chip = document.createElement('div');
+                chip.className = 'user-chip';
+                chip.innerHTML = `
+                    <span>👤 ${st.name}</span>
+                    <span class="user-chip-score">${st.score} امتیاز</span>
+                `;
+                chip.onclick = () => enterGameAs(st.name);
+                list.appendChild(chip);
+            });
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const input = document.getElementById('student-name-input');
+            const name = input.value.trim();
+            if (!name) return;
+            enterGameAs(name);
+        }
+
+        function enterGameAs(name) {
+            const student = ensureStudentProfile(name);
+            student.lastActiveStamp = getSystemDayStamp();
+            appData.currentStudent = student.name;
+            saveStorage();
+
+            document.getElementById('login-screen').style.display = 'none';
+            updateHeaderAndStats();
+            loadNextQuestion();
+        }
+
+        function logoutStudent() {
+            appData.currentStudent = null;
+            saveStorage();
+            renderSavedUsersOnLogin();
+            document.getElementById('student-name-input').value = '';
+            document.getElementById('login-screen').style.display = 'flex';
+        }
+
+        function updateHeaderAndStats(animateScore = false) {
+            const student = appData.students[appData.currentStudent];
+            if (!student) return;
+
+            const todayStamp = getSystemDayStamp();
+
+            document.getElementById('header-student-name').textContent = student.name;
+            document.getElementById('header-avatar').textContent = student.name.charAt(0);
+            document.getElementById('header-student-score').textContent = student.score;
+
+            if (animateScore) {
+                const pill = document.getElementById('header-score-pill');
+                pill.classList.remove('pulse-score');
+                void pill.offsetWidth;
+                pill.classList.add('pulse-score');
+            }
+
+            const boxCounts = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+            const dueCounts = { 1: 0, 2: 0, 3: 0, 4: 0 };
+            let totalDueToday = 0;
+            let totalInLeitner = 0;
+
+            QUESTION_BANK.forEach(q => {
+                const st = getCardState(student, q.id);
+                boxCounts[st.box] = (boxCounts[st.box] || 0) + 1;
+                if (st.box >= 1 && st.box <= 4) {
+                    totalInLeitner++;
+                    if (isCardDue(st, todayStamp)) {
+                        dueCounts[st.box]++;
+                        totalDueToday++;
+                    }
+                }
+            });
+
+            for (let b = 0; b <= 5; b++) {
+                document.getElementById(`count-box-${b}`).textContent = boxCounts[b];
+                if (b >= 1 && b <= 4) {
+                    const boxEl = document.getElementById(`box-stat-${b}`);
+                    const dueHolder = document.getElementById(`due-box-${b}`);
+                    if (dueCounts[b] > 0) {
+                        boxEl.classList.add('has-due');
+                        dueHolder.innerHTML = `<span class="l-box-due-tag">${dueCounts[b]} موعد امروز</span>`;
+                    } else {
+                        boxEl.classList.remove('has-due');
+                        dueHolder.innerHTML = '';
+                    }
+                }
+            }
+
+            const dueBadge = document.getElementById('due-tab-badge');
+            if (totalDueToday > 0) {
+                dueBadge.style.display = 'inline-block';
+                dueBadge.textContent = `${totalDueToday} مرور`;
+            } else {
+                dueBadge.style.display = 'none';
+            }
+
+            document.getElementById('stat-total-score').textContent = `${student.score} امتیاز`;
+            document.getElementById('stat-due-today').textContent = `${totalDueToday} سوال`;
+            document.getElementById('stat-in-leitner').textContent = `${totalInLeitner} سوال`;
+            document.getElementById('stat-correct-mcq').textContent = `${student.correctMcqCount || 0} عدد`;
+            document.getElementById('stat-mastered').textContent = `${boxCounts[5]} از ${QUESTION_BANK.length}`;
+
+            const pct = Math.round((boxCounts[5] / QUESTION_BANK.length) * 100);
+            document.getElementById('progress-percent').textContent = `${pct}%`;
+            document.getElementById('progress-bar-fill').style.width = `${pct}%`;
+        }
+
+        function pickNextQuestion() {
+            const student = appData.students[appData.currentStudent];
+            if (!student) return null;
+
+            const todayStamp = getSystemDayStamp();
+            const mode = document.getElementById('filter-mode').value;
+            const lessonFilter = document.getElementById('filter-lesson').value;
+            const typeFilter = document.getElementById('filter-type').value;
+
+            let pool = QUESTION_BANK.filter(q => {
+                if (lessonFilter !== 'all' && q.category !== lessonFilter) return false;
+                if (typeFilter !== 'all' && q.type !== typeFilter) return false;
+                return true;
+            });
+
+            const dueQuestions = [];
+            const newQuestions = [];
+            const waitingLeitnerQuestions = [];
+
+            pool.forEach(q => {
+                const st = getCardState(student, q.id);
+                if (isCardDue(st, todayStamp)) {
+                    dueQuestions.push({ q, st });
+                } else if (st.box === 0) {
+                    newQuestions.push({ q, st });
+                } else if (st.box >= 1 && st.box <= 4) {
+                    waitingLeitnerQuestions.push({ q, st });
+                }
+            });
+
+            dueQuestions.sort((a, b) => a.st.box - b.st.box || a.st.nextReviewDay - b.st.nextReviewDay);
+
+            if (mode === 'due_only') {
+                return dueQuestions.length > 0 ? dueQuestions[0].q : { emptyReason: 'no_due', waitingCount: waitingLeitnerQuestions.length };
+            }
+
+            if (mode === 'new_only') {
+                return newQuestions.length > 0 ? newQuestions[0].q : { emptyReason: 'no_new', waitingCount: waitingLeitnerQuestions.length };
+            }
+
+            if (dueQuestions.length > 0) return dueQuestions[0].q;
+            if (newQuestions.length > 0) return newQuestions[0].q;
+
+            return { emptyReason: 'all_done_for_today', waitingCount: waitingLeitnerQuestions.length };
+        }
+
+        function loadNextQuestion() {
+            questionAnswered = false;
+            const stage = document.getElementById('question-stage');
+            const next = pickNextQuestion();
+
+            if (!next || next.emptyReason) {
+                currentQuestion = null;
+                renderEmptyStage(next ? next.emptyReason : 'none', next ? next.waitingCount : 0);
+                return;
+            }
+
+            currentQuestion = next;
+            const student = appData.students[appData.currentStudent];
+            const cardState = getCardState(student, currentQuestion.id);
+
+            const typeBadge = currentQuestion.type === 'mcq'
+                ? `<span class="q-badge badge-mcq">سوال تستی (+۱۰ امتیاز)</span>`
+                : `<span class="q-badge badge-desc">سوال تشریحی (مرور مفهومی)</span>`;
+
+            let leitnerBadge = '';
+            if (cardState.box === 0) {
+                leitnerBadge = `<span class="q-badge badge-leitner">سوال جدید</span>`;
+            } else if (cardState.box >= 1 && cardState.box <= 4) {
+                leitnerBadge = `<span class="q-badge badge-leitner">🔔 موعد مرور امروز (خانه ${cardState.box})</span>`;
+            }
+
+            let interactionHTML = '';
+            if (currentQuestion.type === 'mcq') {
+                interactionHTML = `
+                    <div class="options-grid" id="mcq-options">
+                        ${currentQuestion.options.map((opt, idx) => `
+                            <button class="option-btn" id="opt-btn-${idx + 1}" onclick="submitMcqAnswer(${idx + 1})">
+                                <span class="option-num">${idx + 1}</span>
+                                <span>${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                interactionHTML = `
+                    <div class="descriptive-area">
+                        <button class="btn btn-primary" id="btn-show-desc-answer" onclick="revealDescriptiveAnswer()">
+                            👁️ مشاهده پاسخ صحیح کتاب
+                        </button>
+                        <div class="answer-reveal-box" id="desc-answer-box">
+                            <div class="answer-reveal-title">✅ پاسخ استاندارد کتاب علوم ششم:</div>
+                            <div class="answer-reveal-text">${currentQuestion.answer}</div>
+                        </div>
+                        <div class="self-eval-buttons" id="desc-eval-btns">
+                            <button class="btn btn-remember" onclick="submitDescriptiveAnswer(true)">
+                                👍 پاسخ را بلد بودم (مرحله بعد)
+                            </button>
+                            <button class="btn btn-forget" onclick="submitDescriptiveAnswer(false)">
+                                🤔 نیاز به مرور دارم (مرور فردا)
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            stage.innerHTML = `
+                <div class="animate-fade">
+                    <div class="q-meta-bar">
+                        <div class="q-badges">
+                            <span class="q-badge badge-lesson">📘 ${currentQuestion.category}</span>
+                            ${typeBadge}
+                            ${leitnerBadge}
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700;">
+                            سوال شماره ${currentQuestion.id} از ${QUESTION_BANK.length}
+                        </div>
+                    </div>
+
+                    <div class="q-text">${currentQuestion.question}</div>
+
+                    ${interactionHTML}
+                </div>
+
+                <div>
+                    <div class="feedback-banner" id="feedback-banner">
+                        <span id="feedback-text"></span>
+                        <button class="btn-sm" style="background:#0f172a; color:#fff; padding:9px 18px; font-size:0.9rem;" onclick="loadNextQuestion()">
+                            سوال بعدی ⬅
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderEmptyStage(reason, waitingCount) {
+            const stage = document.getElementById('question-stage');
+            let title = '🎉 آفرین! مرور امروز کامل شد';
+            let desc = 'تمام سوالات مشخص‌شده برای امروز را بررسی کردید.';
+
+            if (reason === 'no_due') {
+                title = '✨ در حال حاضر سوالی برای مرور امروز ندارید!';
+                desc = waitingCount > 0
+                    ? `شما ${waitingCount} سوال در جعبه لایتنر دارید که در روزهای آینده نوبت مرور آن‌ها خواهد رسید.`
+                    : 'هیچ سوالی در جعبه منتظر مرور نیست. می‌توانید از سوالات جدید شروع کنید.';
+            } else if (reason === 'no_new') {
+                title = '📚 تمام سوالات جدید این بخش بررسی شده‌اند!';
+                desc = 'می‌توانید حالت مرور را روی «هوشمند» بگذارید تا در روزهای بعد مرورهای لایتنر را ببینید.';
+            } else if (waitingCount > 0) {
+                desc = `شما ${waitingCount} سوال در روزهای آینده برای مرور خواهید داشت. با رسیدن تاریخ روزهای بعد، سوالات به‌صورت خودکار فعال می‌شوند.`;
+            }
+
+            stage.innerHTML = `
+                <div class="empty-state animate-fade">
+                    <div class="empty-icon">🌟</div>
+                    <div class="empty-title">${title}</div>
+                    <p class="empty-desc">${desc}</p>
+                    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                        <button class="btn" style="background:#e2e8f0; color:#1e293b;" onclick="switchView('leitner')">مشاهده وضعیت جعبه لایتنر 🗂️</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function revealDescriptiveAnswer() {
+            document.getElementById('btn-show-desc-answer').style.display = 'none';
+            document.getElementById('desc-answer-box').style.display = 'block';
+            document.getElementById('desc-eval-btns').style.display = 'grid';
+        }
+
+        function processLeitnerTransition(q, isCorrect) {
+            const student = appData.students[appData.currentStudent];
+            const todayStamp = getSystemDayStamp();
+            const prev = getCardState(student, q.id);
+
+            let newBox = prev.box;
+            let nextReviewDay = todayStamp;
+            let earnedPoints = 0;
+
+            if (isCorrect) {
+                if (q.type === 'mcq') {
+                    earnedPoints = 10;
+                    student.score += 10;
+                    student.correctMcqCount = (student.correctMcqCount || 0) + 1;
+                }
+
+                if (prev.box === 0) {
+                    newBox = 5;
+                    nextReviewDay = 0;
+                } else if (prev.box >= 1 && prev.box < 4) {
+                    newBox = prev.box + 1;
+                    nextReviewDay = todayStamp + LEITNER_INTERVALS[newBox];
+                } else {
+                    newBox = 5;
+                    nextReviewDay = 0;
+                }
+            } else {
+                newBox = 1;
+                nextReviewDay = todayStamp + LEITNER_INTERVALS[1];
+            }
+
+            student.cards[q.id] = {
+                box: newBox,
+                nextReviewDay: nextReviewDay,
+                lastReviewedDay: todayStamp,
+                wrongCount: isCorrect ? prev.wrongCount : (prev.wrongCount || 0) + 1
+            };
+            student.lastActiveStamp = todayStamp;
+            saveStorage();
+
+            return { newBox, nextReviewDay, earnedPoints, prevBox: prev.box };
+        }
+
+        function submitMcqAnswer(selectedOption) {
+            if (questionAnswered || !currentQuestion) return;
+            questionAnswered = true;
+
+            const isCorrect = (selectedOption === currentQuestion.answer);
+            for (let i = 1; i <= 4; i++) {
+                const btn = document.getElementById(`opt-btn-${i}`);
+                btn.disabled = true;
+                if (i === currentQuestion.answer) {
+                    btn.classList.add('correct');
+                } else if (i === selectedOption && !isCorrect) {
+                    btn.classList.add('wrong');
+                }
+            }
+
+            const result = processLeitnerTransition(currentQuestion, isCorrect);
+            updateHeaderAndStats(isCorrect);
+
+            const banner = document.getElementById('feedback-banner');
+            const text = document.getElementById('feedback-text');
+            banner.style.display = 'flex';
+
+            if (isCorrect) {
+                banner.className = 'feedback-banner success';
+                if (result.newBox === 5) {
+                    text.innerHTML = `✅ آفرین! کاملاً درست بود (<strong>+۱۰ امتیاز</strong>). این سوال با موفقیت تثبیت شد.`;
+                } else {
+                    const days = LEITNER_INTERVALS[result.newBox];
+                    const nextDateStr = formatPersianDateFromDayStamp(result.nextReviewDay);
+                    text.innerHTML = `✅ احسنت! پاسخ صحیح است (<strong>+۱۰ امتیاز</strong>). سوال به <strong>خانه ${result.newBox}</strong> رفت (مرور بعدی: ${days} روز دیگر در تاریخ ${nextDateStr}).`;
+                }
+            } else {
+                banner.className = 'feedback-banner error';
+                const nextDateStr = formatPersianDateFromDayStamp(result.nextReviewDay);
+                text.innerHTML = `❌ پاسخ نادرست بود! گزینه صحیح، گزینه ${currentQuestion.answer} است. این سوال به <strong>خانه ۱</strong> برگشت تا <strong>فردا (${nextDateStr})</strong> دوباره مرور شود.`;
+            }
+        }
+
+        function submitDescriptiveAnswer(remembered) {
+            if (questionAnswered || !currentQuestion) return;
+            questionAnswered = true;
+
+            document.getElementById('desc-eval-btns').style.display = 'none';
+            const result = processLeitnerTransition(currentQuestion, remembered);
+            updateHeaderAndStats(false);
+
+            const banner = document.getElementById('feedback-banner');
+            const text = document.getElementById('feedback-text');
+            banner.style.display = 'flex';
+
+            if (remembered) {
+                banner.className = 'feedback-banner success';
+                if (result.newBox === 5) {
+                    text.innerHTML = `👍 بسیار عالی! این نکته مهم را به خاطر سپردید و تثبیت شد.`;
+                } else {
+                    const days = LEITNER_INTERVALS[result.newBox];
+                    const nextDateStr = formatPersianDateFromDayStamp(result.nextReviewDay);
+                    text.innerHTML = `👍 عالی! سوال به <strong>خانه ${result.newBox}</strong> رفت (${days} روز دیگر مرور می‌شود).`;
+                }
+            } else {
+                banner.className = 'feedback-banner error';
+                const nextDateStr = formatPersianDateFromDayStamp(result.nextReviewDay);
+                text.innerHTML = `📌 اشکالی ندارد! این سوال به <strong>خانه ۱</strong> رفت تا <strong>فردا (${nextDateStr})</strong> دوباره آن را بخوانید.`;
+            }
+        }
+
+        function switchView(viewName) {
+            ['play', 'leitner', 'leaderboard'].forEach(v => {
+                document.getElementById(`view-${v}`).classList.toggle('active', v === viewName);
+                document.getElementById(`tab-btn-${v}`).classList.toggle('active', v === viewName);
+            });
+
+            if (viewName === 'leitner') renderLeitnerTable();
+            if (viewName === 'leaderboard') renderLeaderboardTable();
+        }
+
+        function renderLeitnerTable() {
+            const student = appData.students[appData.currentStudent];
+            if (!student) return;
+
+            const todayStamp = getSystemDayStamp();
+            const filter = document.getElementById('leitner-table-filter').value;
+            const tbody = document.getElementById('leitner-table-body');
+            tbody.innerHTML = '';
+
+            const rows = QUESTION_BANK.filter(q => {
+                const st = getCardState(student, q.id);
+                if (filter === 'in_box') return st.box >= 1 && st.box <= 4;
+                if (filter === 'due') return isCardDue(st, todayStamp);
+                if (filter === 'mastered') return st.box === 5;
+                return true;
+            });
+
+            if (rows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px; color:var(--text-muted);">موردی برای نمایش وجود ندارد.</td></tr>`;
+                return;
+            }
+
+            rows.forEach(q => {
+                const st = getCardState(student, q.id);
+                let statusText = 'هنوز خوانده نشده';
+                let nextDateText = '—';
+
+                if (st.box >= 1 && st.box <= 4) {
+                    statusText = `خانه ${st.box} لایتنر`;
+                    const diff = st.nextReviewDay - todayStamp;
+                    if (diff <= 0) {
+                        nextDateText = `<span style="color:var(--danger); font-weight:800;">🔔 موعد مرور امروز!</span>`;
+                    } else {
+                        nextDateText = `${diff} روز بعد (${formatPersianDateFromDayStamp(st.nextReviewDay)})`;
+                    }
+                } else if (st.box === 5) {
+                    statusText = `<span style="color:var(--success);">تثبیت‌شده ✅</span>`;
+                    nextDateText = 'یادگیری کامل';
+                }
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${q.id}</td>
+                    <td>${q.category}</td>
+                    <td>${q.type === 'mcq' ? 'تستی (+۱۰)' : 'تشریحی'}</td>
+                    <td style="max-width:420px; line-height:1.6;">${q.question}</td>
+                    <td>${statusText}</td>
+                    <td>${nextDateText}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderLeaderboardTable() {
+            const tbody = document.getElementById('leaderboard-table-body');
+            tbody.innerHTML = '';
+
+            const list = Object.values(appData.students).sort((a, b) => b.score - a.score);
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:24px;">هنوز دانش‌آموزی ثبت نشده است.</td></tr>`;
+                return;
+            }
+
+            list.forEach((st, idx) => {
+                let inLeitner = 0;
+                let mastered = 0;
+                Object.values(st.cards || {}).forEach(c => {
+                    if (c.box >= 1 && c.box <= 4) inLeitner++;
+                    if (c.box === 5) mastered++;
+                });
+
+                const rank = idx + 1;
+                const rankClass = rank <= 3 ? `rank-${rank}` : '';
+                const tr = document.createElement('tr');
+                if (st.name === appData.currentStudent) {
+                    tr.className = 'current-user-row';
+                }
+
+                tr.innerHTML = `
+                    <td><span class="rank-badge ${rankClass}">${rank}</span></td>
+                    <td><strong>${st.name}</strong> ${st.name === appData.currentStudent ? '<span style="font-size:0.78rem; color:var(--primary);">(شما)</span>' : ''}</td>
+                    <td style="color:var(--accent); font-weight:900; font-size:1.05rem;">⭐ ${st.score} امتیاز</td>
+                    <td>${st.correctMcqCount || 0} عدد</td>
+                    <td>${inLeitner} سوال</td>
+                    <td>${mastered} سوال</td>
+                    <td>${st.lastActiveStamp ? formatPersianDateFromDayStamp(st.lastActiveStamp) : '—'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
